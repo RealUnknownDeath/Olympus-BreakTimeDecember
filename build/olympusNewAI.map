@@ -6986,7 +6986,7 @@ Linker script and memory map
  *(.gnu.linkonce.tb.*)
                 0x0000000003815630                __tbss_end = .
 
-.bss            0x0000000003815630      0xfc1
+.bss            0x0000000003815630     0x1051
                 0x0000000003815630                __bss_start = .
  *(.bss)
  *(.bss.*)
@@ -7083,247 +7083,247 @@ Linker script and memory map
  .bss.controllerDisplay
                 0x0000000003815990       0x30 build/src/main.o
                 0x0000000003815990                controllerDisplay
- .bss.chassis   0x00000000038159c0      0x470 build/src/main.o
+ .bss.chassis   0x00000000038159c0      0x500 build/src/main.o
                 0x00000000038159c0                chassis
  .bss.current_auton_selection
-                0x0000000003815e30        0x4 build/src/main.o
-                0x0000000003815e30                current_auton_selection
+                0x0000000003815ec0        0x4 build/src/main.o
+                0x0000000003815ec0                current_auton_selection
  .bss.colorSelected
-                0x0000000003815e34        0x1 build/src/main.o
-                0x0000000003815e34                colorSelected
+                0x0000000003815ec4        0x1 build/src/main.o
+                0x0000000003815ec4                colorSelected
  .bss.runProgram
-                0x0000000003815e35        0x1 build/src/main.o
-                0x0000000003815e35                runProgram
- *fill*         0x0000000003815e36        0x2 
+                0x0000000003815ec5        0x1 build/src/main.o
+                0x0000000003815ec5                runProgram
+ *fill*         0x0000000003815ec6        0x2 
  .bss.colorOptions
-                0x0000000003815e38        0xc build/src/main.o
-                0x0000000003815e38                colorOptions
+                0x0000000003815ec8        0xc build/src/main.o
+                0x0000000003815ec8                colorOptions
  .bss.autonNames
-                0x0000000003815e44        0xc build/src/main.o
-                0x0000000003815e44                autonNames
+                0x0000000003815ed4        0xc build/src/main.o
+                0x0000000003815ed4                autonNames
  .bss._ZStL8__ioinit
-                0x0000000003815e50        0x1 build/src/robot-config.o
- *fill*         0x0000000003815e51        0x3 
- .bss.Brain     0x0000000003815e54      0x2bc build/src/robot-config.o
-                0x0000000003815e54                Brain
+                0x0000000003815ee0        0x1 build/src/robot-config.o
+ *fill*         0x0000000003815ee1        0x3 
+ .bss.Brain     0x0000000003815ee4      0x2bc build/src/robot-config.o
+                0x0000000003815ee4                Brain
  .bss.LeftMotor1
-                0x0000000003816110       0x24 build/src/robot-config.o
-                0x0000000003816110                LeftMotor1
- .bss.LeftMotor2
-                0x0000000003816134       0x24 build/src/robot-config.o
-                0x0000000003816134                LeftMotor2
- .bss.LeftMotor3
-                0x0000000003816158       0x24 build/src/robot-config.o
-                0x0000000003816158                LeftMotor3
- .bss.RightMotor1
-                0x000000000381617c       0x24 build/src/robot-config.o
-                0x000000000381617c                RightMotor1
- .bss.RightMotor2
                 0x00000000038161a0       0x24 build/src/robot-config.o
-                0x00000000038161a0                RightMotor2
- .bss.RightMotor3
+                0x00000000038161a0                LeftMotor1
+ .bss.LeftMotor2
                 0x00000000038161c4       0x24 build/src/robot-config.o
-                0x00000000038161c4                RightMotor3
+                0x00000000038161c4                LeftMotor2
+ .bss.LeftMotor3
+                0x00000000038161e8       0x24 build/src/robot-config.o
+                0x00000000038161e8                LeftMotor3
+ .bss.RightMotor1
+                0x000000000381620c       0x24 build/src/robot-config.o
+                0x000000000381620c                RightMotor1
+ .bss.RightMotor2
+                0x0000000003816230       0x24 build/src/robot-config.o
+                0x0000000003816230                RightMotor2
+ .bss.RightMotor3
+                0x0000000003816254       0x24 build/src/robot-config.o
+                0x0000000003816254                RightMotor3
  .bss.Controller1
-                0x00000000038161e8      0x1ac build/src/robot-config.o
-                0x00000000038161e8                Controller1
- *fill*         0x0000000003816394        0x4 
- .bss.Inertial  0x0000000003816398       0x38 build/src/robot-config.o
-                0x0000000003816398                Inertial
+                0x0000000003816278      0x1ac build/src/robot-config.o
+                0x0000000003816278                Controller1
+ *fill*         0x0000000003816424        0x4 
+ .bss.Inertial  0x0000000003816428       0x38 build/src/robot-config.o
+                0x0000000003816428                Inertial
  .bss.intakeMotor
-                0x00000000038163d0       0x24 build/src/robot-config.o
-                0x00000000038163d0                intakeMotor
+                0x0000000003816460       0x24 build/src/robot-config.o
+                0x0000000003816460                intakeMotor
  .bss.middleTravel
-                0x00000000038163f4       0x24 build/src/robot-config.o
-                0x00000000038163f4                middleTravel
+                0x0000000003816484       0x24 build/src/robot-config.o
+                0x0000000003816484                middleTravel
  .bss.scoreMotor
-                0x0000000003816418       0x24 build/src/robot-config.o
-                0x0000000003816418                scoreMotor
+                0x00000000038164a8       0x24 build/src/robot-config.o
+                0x00000000038164a8                scoreMotor
  .bss.outtakeRaise
-                0x000000000381643c       0x18 build/src/robot-config.o
-                0x000000000381643c                outtakeRaise
+                0x00000000038164cc       0x18 build/src/robot-config.o
+                0x00000000038164cc                outtakeRaise
  .bss.Optical21
-                0x0000000003816454       0x18 build/src/robot-config.o
-                0x0000000003816454                Optical21
+                0x00000000038164e4       0x18 build/src/robot-config.o
+                0x00000000038164e4                Optical21
  .bss.descorePiston
-                0x000000000381646c       0x18 build/src/robot-config.o
-                0x000000000381646c                descorePiston
+                0x00000000038164fc       0x18 build/src/robot-config.o
+                0x00000000038164fc                descorePiston
  .bss.matchLoadPiston
-                0x0000000003816484       0x18 build/src/robot-config.o
-                0x0000000003816484                matchLoadPiston
+                0x0000000003816514       0x18 build/src/robot-config.o
+                0x0000000003816514                matchLoadPiston
  .bss.DistanceRight
-                0x000000000381649c       0x10 build/src/robot-config.o
-                0x000000000381649c                DistanceRight
+                0x000000000381652c       0x10 build/src/robot-config.o
+                0x000000000381652c                DistanceRight
  .bss.DistanceBack
-                0x00000000038164ac       0x10 build/src/robot-config.o
-                0x00000000038164ac                DistanceBack
+                0x000000000381653c       0x10 build/src/robot-config.o
+                0x000000000381653c                DistanceBack
  .bss.DistanceLeft
-                0x00000000038164bc       0x10 build/src/robot-config.o
-                0x00000000038164bc                DistanceLeft
+                0x000000000381654c       0x10 build/src/robot-config.o
+                0x000000000381654c                DistanceLeft
  .bss.DistanceFront
-                0x00000000038164cc       0x10 build/src/robot-config.o
-                0x00000000038164cc                DistanceFront
+                0x000000000381655c       0x10 build/src/robot-config.o
+                0x000000000381655c                DistanceFront
  .bss.LineTracker
-                0x00000000038164dc       0x1c build/src/robot-config.o
-                0x00000000038164dc                LineTracker
- .bss.GPS7      0x00000000038164f8       0x38 build/src/robot-config.o
-                0x00000000038164f8                GPS7
- .bss.Aligner   0x0000000003816530       0x18 build/src/robot-config.o
-                0x0000000003816530                Aligner
- .bss.odom      0x0000000003816548       0x10 build/src/robot-config.o
-                0x0000000003816548                odom
+                0x000000000381656c       0x1c build/src/robot-config.o
+                0x000000000381656c                LineTracker
+ .bss.GPS7      0x0000000003816588       0x38 build/src/robot-config.o
+                0x0000000003816588                GPS7
+ .bss.Aligner   0x00000000038165c0       0x18 build/src/robot-config.o
+                0x00000000038165c0                Aligner
+ .bss.odom      0x00000000038165d8       0x10 build/src/robot-config.o
+                0x00000000038165d8                odom
  .bss.MatchloadSensor
-                0x0000000003816558       0x18 build/src/robot-config.o
-                0x0000000003816558                MatchloadSensor
+                0x00000000038165e8       0x18 build/src/robot-config.o
+                0x00000000038165e8                MatchloadSensor
  .bss._ZStL8__ioinit
-                0x0000000003816570        0x1 build/src/Santi-Template/PID.o
+                0x0000000003816600        0x1 build/src/Santi-Template/PID.o
  .bss._ZStL8__ioinit
-                0x0000000003816571        0x1 build/src/Santi-Template/drive.o
+                0x0000000003816601        0x1 build/src/Santi-Template/drive.o
  .bss._ZStL8__ioinit
-                0x0000000003816572        0x1 build/src/Santi-Template/odom.o
+                0x0000000003816602        0x1 build/src/Santi-Template/odom.o
  .bss._ZStL8__ioinit
-                0x0000000003816573        0x1 build/src/Santi-Template/ramsete.o
+                0x0000000003816603        0x1 build/src/Santi-Template/ramsete.o
  .bss._ZStL8__ioinit
-                0x0000000003816574        0x1 build/src/Santi-Template/util.o
+                0x0000000003816604        0x1 build/src/Santi-Template/util.o
  .bss._ZStL8__ioinit
-                0x0000000003816575        0x1 build/src/autons/13ball.o
+                0x0000000003816605        0x1 build/src/autons/13ball.o
  .bss._ZStL8__ioinit
-                0x0000000003816576        0x1 build/src/autons/9ball_elims.o
+                0x0000000003816606        0x1 build/src/autons/9ball_elims.o
  .bss._ZStL8__ioinit
-                0x0000000003816577        0x1 build/src/autons/hook_macros.o
+                0x0000000003816607        0x1 build/src/autons/hook_macros.o
  .bss._ZStL8__ioinit
-                0x0000000003816578        0x1 build/src/autons/quals_hook.o
+                0x0000000003816608        0x1 build/src/autons/quals_hook.o
  .bss._ZStL8__ioinit
-                0x0000000003816579        0x1 build/src/autons/risky_progSkills.o
+                0x0000000003816609        0x1 build/src/autons/risky_progSkills.o
  .bss._ZStL8__ioinit
-                0x000000000381657a        0x1 build/src/autons/risky_soloAWP.o
+                0x000000000381660a        0x1 build/src/autons/risky_soloAWP.o
  .bss._ZStL8__ioinit
-                0x000000000381657b        0x1 build/src/autons/safe_progSkills.o
+                0x000000000381660b        0x1 build/src/autons/safe_progSkills.o
  .bss._ZStL8__ioinit
-                0x000000000381657c        0x1 build/src/autons/safe_soloAWP.o
+                0x000000000381660c        0x1 build/src/autons/safe_soloAWP.o
  .bss._ZStL8__ioinit
-                0x000000000381657d        0x1 build/src/autons/shame.o
+                0x000000000381660d        0x1 build/src/autons/shame.o
  .bss._ZStL8__ioinit
-                0x000000000381657e        0x1 build/src/autons/slam_macros.o
+                0x000000000381660e        0x1 build/src/autons/slam_macros.o
  .bss._ZStL8__ioinit
-                0x000000000381657f        0x1 build/src/monte_carlo/gps_.o
+                0x000000000381660f        0x1 build/src/monte_carlo/gps_.o
  .bss._ZStL8__ioinit
-                0x0000000003816580        0x1 build/src/monte_carlo/monte_carlo.o
+                0x0000000003816610        0x1 build/src/monte_carlo/monte_carlo.o
  .bss._ZStL8__ioinit
-                0x0000000003816581        0x1 build/src/monte_carlo/telemetry.o
- *fill*         0x0000000003816582        0x2 
+                0x0000000003816611        0x1 build/src/monte_carlo/telemetry.o
+ *fill*         0x0000000003816612        0x2 
  .bss.__dso_handle
-                0x0000000003816584        0x4 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(v5_startup.c.obj)
-                0x0000000003816584                __dso_handle
+                0x0000000003816614        0x4 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(v5_startup.c.obj)
+                0x0000000003816614                __dso_handle
  .bss.lastTime.9835
-                0x0000000003816588        0x4 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(v5_apijump.c.obj)
+                0x0000000003816618        0x4 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(v5_apijump.c.obj)
  .bss._ZN3vex4task8_labelIdE
-                0x000000000381658c        0x4 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_task.cpp.obj)
-                0x000000000381658c                vex::task::_labelId
+                0x000000000381661c        0x4 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_task.cpp.obj)
+                0x000000000381661c                vex::task::_labelId
  .bss._ZN3vex11competition22bStopTasksBetweenModesE
-                0x0000000003816590        0x1 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_competition.cpp.obj)
-                0x0000000003816590                vex::competition::bStopTasksBetweenModes
+                0x0000000003816620        0x1 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_competition.cpp.obj)
+                0x0000000003816620                vex::competition::bStopTasksBetweenModes
  .bss._ZN3vex11competition25bStopAllTasksBetweenModesE
-                0x0000000003816591        0x1 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_competition.cpp.obj)
-                0x0000000003816591                vex::competition::bStopAllTasksBetweenModes
+                0x0000000003816621        0x1 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_competition.cpp.obj)
+                0x0000000003816621                vex::competition::bStopAllTasksBetweenModes
  .bss._ZN3vex11competition14_auton_pendingE
-                0x0000000003816592        0x1 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_competition.cpp.obj)
-                0x0000000003816592                vex::competition::_auton_pending
- *fill*         0x0000000003816593        0x1 
+                0x0000000003816622        0x1 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_competition.cpp.obj)
+                0x0000000003816622                vex::competition::_auton_pending
+ *fill*         0x0000000003816623        0x1 
  .bss._ZN3vex11competition20_autonomous_callbackE
-                0x0000000003816594        0x4 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_competition.cpp.obj)
-                0x0000000003816594                vex::competition::_autonomous_callback
+                0x0000000003816624        0x4 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_competition.cpp.obj)
+                0x0000000003816624                vex::competition::_autonomous_callback
  .bss._ZN3vex11competition23_drivercontrol_callbackE
-                0x0000000003816598        0x4 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_competition.cpp.obj)
-                0x0000000003816598                vex::competition::_drivercontrol_callback
+                0x0000000003816628        0x4 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_competition.cpp.obj)
+                0x0000000003816628                vex::competition::_drivercontrol_callback
  .bss._ZN3vex11competition15_driver_pendingE
-                0x000000000381659c        0x1 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_competition.cpp.obj)
-                0x000000000381659c                vex::competition::_driver_pending
- *fill*         0x000000000381659d        0x3 
+                0x000000000381662c        0x1 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_competition.cpp.obj)
+                0x000000000381662c                vex::competition::_driver_pending
+ *fill*         0x000000000381662d        0x3 
  .bss._ZN3vex5color6orangeE
-                0x00000000038165a0        0x8 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_color.cpp.obj)
-                0x00000000038165a0                vex::color::orange
+                0x0000000003816630        0x8 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_color.cpp.obj)
+                0x0000000003816630                vex::color::orange
  .bss._ZN3vex5color5blackE
-                0x00000000038165a8        0x8 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_color.cpp.obj)
-                0x00000000038165a8                vex::color::black
+                0x0000000003816638        0x8 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_color.cpp.obj)
+                0x0000000003816638                vex::color::black
  .bss._ZN3vex5color6yellowE
-                0x00000000038165b0        0x8 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_color.cpp.obj)
-                0x00000000038165b0                vex::color::yellow
+                0x0000000003816640        0x8 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_color.cpp.obj)
+                0x0000000003816640                vex::color::yellow
  .bss._ZN3vex5color5greenE
-                0x00000000038165b8        0x8 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_color.cpp.obj)
-                0x00000000038165b8                vex::color::green
+                0x0000000003816648        0x8 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_color.cpp.obj)
+                0x0000000003816648                vex::color::green
  .bss._ZN3vex5color6purpleE
-                0x00000000038165c0        0x8 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_color.cpp.obj)
-                0x00000000038165c0                vex::color::purple
+                0x0000000003816650        0x8 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_color.cpp.obj)
+                0x0000000003816650                vex::color::purple
  .bss._ZN3vex5color4cyanE
-                0x00000000038165c8        0x8 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_color.cpp.obj)
-                0x00000000038165c8                vex::color::cyan
+                0x0000000003816658        0x8 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_color.cpp.obj)
+                0x0000000003816658                vex::color::cyan
  .bss._ZN3vex5color4blueE
-                0x00000000038165d0        0x8 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_color.cpp.obj)
-                0x00000000038165d0                vex::color::blue
+                0x0000000003816660        0x8 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_color.cpp.obj)
+                0x0000000003816660                vex::color::blue
  .bss._ZN3vex5color3redE
-                0x00000000038165d8        0x8 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_color.cpp.obj)
-                0x00000000038165d8                vex::color::red
+                0x0000000003816668        0x8 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_color.cpp.obj)
+                0x0000000003816668                vex::color::red
  .bss._ZN3vex5color11transparentE
-                0x00000000038165e0        0x8 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_color.cpp.obj)
-                0x00000000038165e0                vex::color::transparent
+                0x0000000003816670        0x8 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_color.cpp.obj)
+                0x0000000003816670                vex::color::transparent
  .bss._ZN3vex5color5whiteE
-                0x00000000038165e8        0x8 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_color.cpp.obj)
-                0x00000000038165e8                vex::color::white
+                0x0000000003816678        0x8 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(vex_color.cpp.obj)
+                0x0000000003816678                vex::color::white
  *(.gnu.linkonce.b.*)
  *(COMMON)
- COMMON         0x00000000038165f0        0x1 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(v5_startup.c.obj)
-                0x00000000038165f0                __vex_critical_section
-                0x00000000038165f1                __bss_end = .
+ COMMON         0x0000000003816680        0x1 /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/libv5rt.a(v5_startup.c.obj)
+                0x0000000003816680                __vex_critical_section
+                0x0000000003816681                __bss_end = .
                 0x0000000003815630                _SDA_BASE_ = (__sdata_start + ((__sbss_end - __sdata_start) / 0x2))
                 0x000000000381515c                _SDA2_BASE_ = (__sdata2_start + ((__sbss2_end - __sdata2_start) / 0x2))
 
-.heap           0x00000000038165f1   0x10000f
-                0x0000000003816600                . = ALIGN (0x10)
- *fill*         0x00000000038165f1        0xf 
-                0x0000000003816600                _heap = .
-                0x0000000003816600                HeapBase = .
-                0x0000000003816600                _heap_start = .
-                0x0000000003916600                . = (. + _HEAP_SIZE)
- *fill*         0x0000000003816600   0x100000 
-                0x0000000003916600                _heap_end = .
-                0x0000000003916600                HeapLimit = .
+.heap           0x0000000003816681   0x10000f
+                0x0000000003816690                . = ALIGN (0x10)
+ *fill*         0x0000000003816681        0xf 
+                0x0000000003816690                _heap = .
+                0x0000000003816690                HeapBase = .
+                0x0000000003816690                _heap_start = .
+                0x0000000003916690                . = (. + _HEAP_SIZE)
+ *fill*         0x0000000003816690   0x100000 
+                0x0000000003916690                _heap_end = .
+                0x0000000003916690                HeapLimit = .
 
-.stack          0x0000000003916600     0x3800
-                0x0000000003916600                . = ALIGN (0x10)
-                0x0000000003916600                _stack_end = .
-                0x0000000003918600                . = (. + _STACK_SIZE)
- *fill*         0x0000000003916600     0x2000 
-                0x0000000003918600                . = ALIGN (0x10)
-                0x0000000003918600                _stack = .
-                0x0000000003918600                __stack = _stack
-                0x0000000003918600                . = ALIGN (0x10)
-                0x0000000003918600                _irq_stack_end = .
-                0x0000000003918a00                . = (. + _IRQ_STACK_SIZE)
- *fill*         0x0000000003918600      0x400 
-                0x0000000003918a00                . = ALIGN (0x10)
-                0x0000000003918a00                __irq_stack = .
-                0x0000000003918a00                _supervisor_stack_end = .
-                0x0000000003919200                . = (. + _SUPERVISOR_STACK_SIZE)
- *fill*         0x0000000003918a00      0x800 
-                0x0000000003919200                . = ALIGN (0x10)
-                0x0000000003919200                __supervisor_stack = .
-                0x0000000003919200                _abort_stack_end = .
-                0x0000000003919600                . = (. + _ABORT_STACK_SIZE)
- *fill*         0x0000000003919200      0x400 
-                0x0000000003919600                . = ALIGN (0x10)
-                0x0000000003919600                __abort_stack = .
-                0x0000000003919600                _fiq_stack_end = .
-                0x0000000003919a00                . = (. + _FIQ_STACK_SIZE)
- *fill*         0x0000000003919600      0x400 
-                0x0000000003919a00                . = ALIGN (0x10)
-                0x0000000003919a00                __fiq_stack = .
-                0x0000000003919a00                _undef_stack_end = .
-                0x0000000003919e00                . = (. + _UNDEF_STACK_SIZE)
- *fill*         0x0000000003919a00      0x400 
-                0x0000000003919e00                . = ALIGN (0x10)
-                0x0000000003919e00                __undef_stack = .
-                0x0000000003919e00                _end = .
+.stack          0x0000000003916690     0x3800
+                0x0000000003916690                . = ALIGN (0x10)
+                0x0000000003916690                _stack_end = .
+                0x0000000003918690                . = (. + _STACK_SIZE)
+ *fill*         0x0000000003916690     0x2000 
+                0x0000000003918690                . = ALIGN (0x10)
+                0x0000000003918690                _stack = .
+                0x0000000003918690                __stack = _stack
+                0x0000000003918690                . = ALIGN (0x10)
+                0x0000000003918690                _irq_stack_end = .
+                0x0000000003918a90                . = (. + _IRQ_STACK_SIZE)
+ *fill*         0x0000000003918690      0x400 
+                0x0000000003918a90                . = ALIGN (0x10)
+                0x0000000003918a90                __irq_stack = .
+                0x0000000003918a90                _supervisor_stack_end = .
+                0x0000000003919290                . = (. + _SUPERVISOR_STACK_SIZE)
+ *fill*         0x0000000003918a90      0x800 
+                0x0000000003919290                . = ALIGN (0x10)
+                0x0000000003919290                __supervisor_stack = .
+                0x0000000003919290                _abort_stack_end = .
+                0x0000000003919690                . = (. + _ABORT_STACK_SIZE)
+ *fill*         0x0000000003919290      0x400 
+                0x0000000003919690                . = ALIGN (0x10)
+                0x0000000003919690                __abort_stack = .
+                0x0000000003919690                _fiq_stack_end = .
+                0x0000000003919a90                . = (. + _FIQ_STACK_SIZE)
+ *fill*         0x0000000003919690      0x400 
+                0x0000000003919a90                . = ALIGN (0x10)
+                0x0000000003919a90                __fiq_stack = .
+                0x0000000003919a90                _undef_stack_end = .
+                0x0000000003919e90                . = (. + _UNDEF_STACK_SIZE)
+ *fill*         0x0000000003919a90      0x400 
+                0x0000000003919e90                . = ALIGN (0x10)
+                0x0000000003919e90                __undef_stack = .
+                0x0000000003919e90                _end = .
 LOAD /Applications/VEXcode Pro V5.app/Contents/Resources/sdk/vexv5/stdlib_0.lib
 LOAD build/src/AutonRegistry.o
 LOAD build/src/AutonUI.o
