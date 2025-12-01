@@ -24,6 +24,25 @@ void testRickyCool() {
   chassis.drive_distance(2.0f, chassis.get_absolute_heading());
 }
 
+void driveToMatchloader(){
+  default_constants();
+  intakeInterface.startIntakeThread();
+
+  toggleMatchLoad();
+
+  wait(1, seconds);
+
+  aPressed();
+
+  
+  chassis.left_front_sensor_drive_distance(3.125, 17.6, 0); //was 6.2 front distance
+
+  chassis.drive_distance(-12);
+  toggleMatchLoad();
+
+
+}
+
 
 void dragon(){
   intakeMotor.setVelocity(100, percent);

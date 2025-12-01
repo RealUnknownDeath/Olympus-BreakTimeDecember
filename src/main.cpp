@@ -239,13 +239,13 @@ void pre_auton() {
   outtakeRaise.set(false);
 
 
-  int len = Brain.SDcard.size("telem_final.txt");
+  int len = Brain.SDcard.size("telem_#100_best.txt");
   Brain.Screen.clearScreen();
   Brain.Screen.setCursor(1,1);
   Brain.Screen.print("Size = %d", len);
   Brain.Screen.newLine();
 
-  if (Brain.SDcard.exists("telem_final.txt")) {
+  if (Brain.SDcard.exists("telem_#100_best.txt")) {
     Brain.Screen.print("File found!");
   } else {
     Brain.Screen.print("File missing!");
@@ -253,7 +253,7 @@ void pre_auton() {
   Brain.Screen.newLine();
 
   // Actually load the model
-  g_telemModelLoaded = load_model("telem_final.txt", g_telemModel);
+  g_telemModelLoaded = load_model("telem_#100_best.txt", g_telemModel);
 
   if (!g_telemModelLoaded) {
     Brain.Screen.print("Model load FAILED");
@@ -310,9 +310,10 @@ void autonomous(void) {
   //redLeftDiddler();
   //safe_soloAWP();
   //redQualsHook();
-  
+  driveToMatchloader();
   //blueRightElims9Ball();
-  redQualsHook();
+  //redQualsHook();
+  
   //blueQualsHook();
   
   //safe_progSkills();

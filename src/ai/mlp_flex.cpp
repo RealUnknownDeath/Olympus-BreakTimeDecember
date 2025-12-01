@@ -19,35 +19,41 @@ std::vector<double> predict_values(const std::vector<double>& params,
     std::size_t offset = 0;
 
     auto forward_layer = [&](std::size_t n_in,
-                             std::size_t n_out,
-                             bool apply_activation) {
+                         std::size_t n_out,
+                         bool apply_activation) {
         layer_out.assign(n_out, 0.0);
+
+        const std::size_t nWeights = n_in * n_out;
+
+        // Optional: sanity check
+        if (offset + nWeights + n_out > params.size()) {
+            // Handle error however you want on robot –
+            // for now, clamp to available range
+        }
+
+        const double* base = params.data() + offset;           // W block start
+        const double* bias_base = base + nWeights;             // b block start
+
         for (std::size_t j = 0; j < n_out; ++j) {
             double sum = 0.0;
 
-            // weights
+            const double* w_row = base + j * n_in;             // row-major
             for (std::size_t i = 0; i < n_in; ++i) {
-                double w = 0.0;
-                if (offset < params.size()) {
-                    w = params[offset++];
-                }
-                sum += w * layer_in[i];
+                sum += w_row[i] * layer_in[i];
             }
 
-            // bias
-            double b = 0.0;
-            if (offset < params.size()) {
-                b = params[offset++];
-            }
-            sum += b;
+            sum += bias_base[j];
 
             if (apply_activation) {
                 sum = act(sum);  // ReLU
             }
             layer_out[j] = sum;
         }
+
+        offset += nWeights + n_out;                            // advance past W and b
         layer_in.swap(layer_out);
     };
+
 
     std::size_t n_in = n_in0;
 

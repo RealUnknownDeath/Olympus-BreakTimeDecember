@@ -418,16 +418,203 @@ void Drive::right_hook(float angle, double ratio, float swing_max_voltage, float
   }
 }
 
-void Drive::left_front_sensor_drive_distance(double front_target, double left_target, double heading_target){
-  left_front_sensor_drive_distance(front_target, left_target, heading_target, ml_front_sensor_offset, ml_left_sensor_offset, ml_align_phase_end, ml_slow_down_start, ml_slow_down_factor, ml_kF, ml_kAlign, ml_max_lean, ml_max_forward_voltage, ml_heading_kP, ml_heading_kI, ml_heading_kD, ml_front_tolerance, ml_left_tolerance, ml_heading_tolerance, ml_timeout, ml_loopDt);
+static inline double dclamp(double v, double lo, double hi) {
+  if (v < lo) return lo;
+  if (v > hi) return hi;
+  return v;
 }
 
-void Drive::left_front_sensor_drive_distance(double front_target, double left_target, double heading_target, double front_sensor_offset, double left_sensor_offset, double align_phase_end, double slow_down_start, double slow_down_factor, double kF, double kAlign, double max_lean, double max_forward_voltage, double heading_kP, double heading_kI, double heading_kD, double front_tolerance, double left_tolerance, double heading_tolerance, double timeout, int loopDt){
-  //Wall normals: where the beams point when you're perfectly squared at the target
+// Smallest signed angle difference (target - current) in [-180,180]
+static inline double angleDiffDeg(double targetDeg, double currentDeg) {
+  // You already have reduce_negative_180_to_180, so use that:
+  return reduce_negative_180_to_180(targetDeg - currentDeg);
+}
 
+// Correct skewed distance to perpendicular-to-wall distance
+static inline double correctedPerpDistance(double measuredIn,
+                                           double robotHeadingDeg,
+                                           double sensorOffsetDeg,   // where sensor points relative to robot front
+                                           double wallNormalDeg) {   // wall normal (field-centric)
+  double beamHeading = robotHeadingDeg + sensorOffsetDeg;
+  double delta       = reduce_negative_180_to_180(beamHeading - wallNormalDeg);
+  double c           = cos(to_rad(delta));  // you already have to_rad()
+
+  // If the beam is very oblique, treat it as unreliable
+  if (fabs(c) < 0.25) {
+    return 1e9;  // effectively "very far"
+  }
+  return measuredIn * c;
+}
+
+
+void Drive::left_front_sensor_drive_distance(double front_target,
+                                             double left_target,
+                                             double heading_target) {
+  left_front_sensor_drive_distance(front_target, left_target, heading_target,
+                                   ml_front_sensor_offset,
+                                   ml_left_sensor_offset,
+                                   ml_align_phase_end,
+                                   ml_slow_down_start,
+                                   ml_slow_down_factor,
+                                   ml_kF,
+                                   ml_kAlign,
+                                   ml_max_lean,
+                                   ml_max_forward_voltage,
+                                   ml_heading_kP,
+                                   ml_heading_kI,
+                                   ml_heading_kD,
+                                   ml_front_tolerance,
+                                   ml_left_tolerance,
+                                   ml_heading_tolerance,
+                                   ml_timeout,
+                                   ml_loopDt,
+                                   ml_hold_time_ms);
+}
+
+
+void Drive::left_front_sensor_drive_distance(double front_target,
+                                             double left_target,
+                                             double heading_target,
+                                             double front_sensor_offset,
+                                             double left_sensor_offset,
+                                             double align_phase_end,
+                                             double slow_down_start,
+                                             double slow_down_factor,
+                                             double kF,
+                                             double kAlign,
+                                             double max_lean,
+                                             double max_forward_voltage,
+                                             double heading_kP,
+                                             double heading_kI,
+                                             double heading_kD,
+                                             double front_tolerance,
+                                             double left_tolerance,
+                                             double heading_tolerance,
+                                             double timeout,
+                                             int    loopDt,
+                                             double hold_time_ms) {
+  // Wall normals: where beams point when squared at target
   double front_wall_normal = heading_target + front_sensor_offset;
-  double left_wall_normal = heading_target + left_sensor_offset;
+  double left_wall_normal  = heading_target + left_sensor_offset;
+
+  // Helper for consistent finish
+  auto finish_and_hold = [&](void) {
+    drive_stop(vex::brakeType::hold);
+    vex::task::sleep((int)hold_time_ms);
+  };
+
+  // --- starting front distance (corrected) for progress ---
+  double heading_start   = get_absolute_heading();
+
+  // TODO: replace FrontDist/LeftDist with your actual vex::distance objects
+  double rawFrontStartIn = DistanceFront.objectDistance(vex::distanceUnits::in);
+  double dF_start        = correctedPerpDistance(rawFrontStartIn,
+                                                 heading_start,
+                                                 front_sensor_offset,
+                                                 front_wall_normal);
+
+  double totalTravel = dF_start - front_target;
+
+  // If already basically at front distance, just clean heading and hold.
+  if (fabs(totalTravel) < 1.0) {
+    PID headingPID(angleDiffDeg(heading_target, get_absolute_heading()),
+                   heading_kP, heading_kI, heading_kD, heading_starti);
+    while (true) {
+      double theta = get_absolute_heading();
+      double hErr  = angleDiffDeg(heading_target, theta);
+      if (fabs(hErr) < heading_tolerance) {
+        finish_and_hold();
+        break;
+      }
+      double turn = headingPID.compute(hErr);
+      drive_with_voltage(-turn, +turn);
+      vex::task::sleep(loopDt);
+    }
+    return;
+  }
+
+  PID headingPID(0.0, heading_kP, heading_kI, heading_kD, heading_starti);
+
+  double startTimeMs = vex::timer::system();
+
+  while (true) {
+    double nowMs = vex::timer::system();
+    if (nowMs - startTimeMs > timeout) {
+      // Safety timeout
+      finish_and_hold();
+      break;
+    }
+
+    // --- Sensor reads ---
+    double rawFrontIn = DistanceFront.objectDistance(vex::distanceUnits::in);
+    double rawLeftIn  = DistanceLeft.objectDistance(vex::distanceUnits::in);
+    double theta      = get_absolute_heading();
+
+    // --- Correct to perpendicular distances ---
+    double dF = correctedPerpDistance(rawFrontIn, theta,
+                                      front_sensor_offset, front_wall_normal);
+    double dL = correctedPerpDistance(rawLeftIn,  theta,
+                                      left_sensor_offset,  left_wall_normal);
+
+    // --- Errors ---
+    double eF    = dF - front_target;
+    double eL    = dL - left_target;
+    double hErr0 = angleDiffDeg(heading_target, theta);
+
+    // --- Stop condition: inside tolerance box ---
+    if (fabs(eF) < front_tolerance &&
+        fabs(eL) < left_tolerance &&
+        fabs(hErr0) < heading_tolerance) {
+      finish_and_hold();
+      break;
+    }
+
+    // --- Progress based on front distance (0..1) ---
+    double progress = (dF_start - dF) / totalTravel;
+    if (progress < 0.0) progress = 0.0;
+    if (progress > 1.0) progress = 1.0;
+
+    // --- Heading bias for Phase 1 ---
+    double biasDeg = 0.0;
+    if (progress < align_phase_end) {
+      double phaseFrac = progress / align_phase_end; // 0..1
+      double taper     = 1.0 - phaseFrac;            // 1..0
+      biasDeg = -kAlign * eL * taper;
+      biasDeg = dclamp(biasDeg, -max_lean, max_lean);
+    }
+    // After align_phase_end, biasDeg = 0 → pure heading_target
+
+    double desiredHeading = heading_target + biasDeg;
+
+    // --- Heading PID ---
+    double hErr = angleDiffDeg(desiredHeading, theta);
+    double turn = headingPID.compute(hErr);
+
+    // --- Forward from front error ---
+    double forward = kF * eF;
+    forward = dclamp(forward, -max_forward_voltage, max_forward_voltage);
+
+    if (progress > slow_down_start) {
+      forward *= slow_down_factor;
+    }
+
+    // If close in front but not in heading, favor turning
+    if (fabs(eF) < 0.5 && fabs(hErr) > heading_tolerance) {
+      forward *= 0.4;
+    }
+
+    // --- Tank outputs ---
+    double leftV  = forward + turn;
+    double rightV = forward - turn;
+    leftV  = dclamp(leftV,  -12.0, 12.0);
+    rightV = dclamp(rightV, -12.0, 12.0);
+
+    drive_with_voltage(leftV, rightV);
+    vex::task::sleep(loopDt);
+  }
 }
+
+
 
 
 /**

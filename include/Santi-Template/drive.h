@@ -94,16 +94,16 @@ public:
   double ml_rightSensorOffsetDeg = 90.0;
 
   //Phases:
-  double ml_align_phase_end = 0.7;
+  double ml_align_phase_end = 0.825; ///was 0.7
   double ml_slow_down_start = 0.9;
   double ml_slow_down_factor = 0.4;
   
   //Gains:
-  double ml_kF = 0.35;
-  double ml_kAlign = 2.0;
-  double ml_max_lean = 12.0;
+  double ml_kF = 0.45; //was 0.35
+  double ml_kAlign = 3.825; //was 2.0
+  double ml_max_lean = 15.25; //was 12.0
   
-  double ml_max_forward_voltage = 8.0;
+  double ml_max_forward_voltage = 10.0;
   
   double ml_heading_kP = 0.9;
   double ml_heading_kI = 0.0;
@@ -112,11 +112,12 @@ public:
   //Stop Tolerances:
   double ml_front_tolerance = 0.5;
   double ml_left_tolerance = 0.5;
-  double ml_heading_tolerance = 2.0;
+  double ml_heading_tolerance = 1.0;
   
   //Misc:
   double ml_timeout = 1500.0;
   double ml_loopDt = 20.0;
+  double ml_hold_time_ms = 285.0;
 
   Drive(enum::drive_setup drive_setup, motor_group DriveL, motor_group DriveR, int gyro_port, float wheel_diameter, float wheel_ratio, float gyro_scale, int DriveLF_port, int DriveRF_port, int DriveLB_port, int DriveRB_port, int ForwardTracker_port, float ForwardTracker_diameter, float ForwardTracker_center_distance, int SidewaysTracker_port, float SidewaysTracker_diameter, float SidewaysTracker_center_distance);
 
@@ -164,7 +165,13 @@ public:
   
   
   void left_front_sensor_drive_distance(double front_target, double left_target, double heading_target);
-  void left_front_sensor_drive_distance(double front_target, double left_target, double heading_target, double front_sensor_offset, double left_sensor_offset, double align_phase_end, double slow_down_start, double slow_down_factor, double kF, double kAlign, double max_lean, double max_forward_voltage, double heading_kP, double heading_kI, double heading_kD, double front_tolerance, double left_tolerance, double heading_tolerance, double timeout, int loopDt);
+  void left_front_sensor_drive_distance(double front_target, double left_target, double heading_target,
+                                        double front_sensor_offset, double left_sensor_offset,
+                                        double align_phase_end, double slow_down_start, double slow_down_factor,
+                                        double kF, double kAlign, double max_lean, double max_forward_voltage,
+                                        double heading_kP, double heading_kI, double heading_kD,
+                                        double front_tolerance, double left_tolerance, double heading_tolerance,
+                                        double timeout, int loopDt, double hold_time_ms);
 
   Odom odom;
   float get_ForwardTracker_position();
