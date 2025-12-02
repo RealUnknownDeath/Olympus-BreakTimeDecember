@@ -34,8 +34,8 @@ void risky_soloAWP(){
   chassis.turn_to_angle(180);
 
 
-  chassis.ml_hold_time_ms = 0;
-  chassis.left_front_sensor_drive_distance(3.65, 18.0, 180); //was 17.6 left and 3.125 front
+  chassis.ml_hold_time_ms = 125;
+  chassis.left_front_sensor_drive_distance(4.05, 18.0, 180); //was 17.6 left and 3.125 front
 
   
   /*
@@ -63,7 +63,7 @@ void risky_soloAWP(){
 
   chassis.ml_max_forward_voltage = 12;
   chassis.ml_hold_time_ms = 0;
-  chassis.left_front_sensor_drive_distance(32.0, 17.6, 180); //right long goal
+  chassis.left_front_sensor_drive_distance(32.0, 17.0, 180); //right long goal was 17.6
   highGoal();
 
   chassis.DriveL.stop();
@@ -152,8 +152,8 @@ void risky_soloAWP(){
   chassis.turn_to_angle(179.5);
   intakeInterface.travel_status = IN_CHECK;
   
-  chassis.ml_hold_time_ms = 0;
-  chassis.right_front_sensor_drive_distance(3.365, 18.1, 180);
+  chassis.ml_hold_time_ms = 125;
+  chassis.right_front_sensor_drive_distance(3.865, 18.1, 180);
   
   toggleAligner();
   chassis.ml_hold_time_ms = 0;

@@ -310,10 +310,10 @@ void autonomous(void) {
   //redLeftDiddler();
   //safe_soloAWP();
   //redQualsHook();
-  driveToMatchloader();
+  //driveToMatchloader();
   //blueRightElims9Ball();
   //redQualsHook();
-  //risky_soloAWP();
+  risky_soloAWP();
   
   //blueQualsHook();
   
@@ -472,10 +472,10 @@ void usercontrol(void) {
     Brain.Screen.newLine();
     Brain.Screen.print("Odom X=%.2f Odom Y=%.2f", chassis.get_X_position(), chassis.get_Y_position());
 
-    chassis.control_arcade_left();
+    //chassis.control_arcade_left();
     
 
-    //chassis.control_tank_ricky();
+    chassis.control_tank_ricky();
     //chassis.control_arcade();
 
     /*

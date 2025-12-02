@@ -1,7 +1,7 @@
 #include "autons.h"
 #include "globals.h"
 #include "vex.h"
-void lastBit(){
+void old_lastBit(){
   default_constants();
   chassis.swing_settle_time = 50;
   chassis.swing_timeout = 500;
@@ -66,6 +66,208 @@ void lastBit(){
   //chassis.drive_to_point(44.65, 48);
   chassis.drive_max_voltage = 6.55;
   chassis.drive_distance(19.5, 45);
+
+
+  //will make 3rd ball much more consistent
+  chassis.turn_timeout = 640;
+  chassis.set_turn_constants(12, 0.57125, 0.005575, 5.6175,4);
+  chassis.set_turn_exit_conditions(1, 151.5, 975);
+  chassis.turn_to_angle(223.75); //was 221.5
+  
+  chassis.drive_max_voltage = 10.5; //was 10
+  chassis.drive_timeout = 750;
+  chassis.drive_settle_time = 350;
+
+  scoreMotor.setVelocity(42.5, percent); //was 42.5
+  intakeInterface.middleGoalDelay(95, msec); //was 90
+  chassis.drive_max_voltage = 10.5;
+  chassis.drive_distance(-15.005,224.85); //was 223.85 and at another point -15.185
+
+  //toggleColorSort();
+
+
+  wait((0.425), seconds); //was 0.825 seconds
+  //scoreMotor.setVelocity(-50, percent);
+  //wait((1.175/2), seconds);
+  scoreMotor.setVelocity(100, percent);
+  scoreMotor.stop();
+  intakeMotor.stop();
+  middleTravel.stop();
+  intakeInterface.travel_status = OFF_travel;
+  intakeInterface.intake_status = OFF_intake;
+
+
+  chassis.drive_timeout = 1950;
+  chassis.drive_settle_time = 750;
+  chassis.drive_max_voltage = 12;
+
+  chassis.drive_distance(47.985, 228.5); //was 47.455 and 47.155
+  //chassis.drive_distance(48.685, 228.5); //was 48.285
+
+  intakeIn();
+  intakeInterface.travel_status = IN_CHECK;
+
+  small_turn_constants_12v();
+  chassis.turn_timeout = 650;
+  chassis.set_turn_constants(12, 0.57125, 0.005575, 5.6175,4);
+  chassis.set_turn_exit_conditions(1, 151.5, 975);
+  chassis.turn_to_angle(180); //was 179.5
+  
+  toggleMatchLoad();
+  wait(0.45, seconds);
+
+  /*
+  chassis.drive_timeout = 875;
+  chassis.drive_settle_time = 150;
+  chassis.drive_distance(12.05);
+
+  chassis.drive_max_voltage = 4.865;
+  chassis.drive_distance(2.05);
+
+  wait(0.785, seconds);
+  */
+  chassis.ml_hold_time_ms = 550;
+  chassis.right_front_sensor_drive_distance(3.125, 18.1, 180);
+
+  chassis.drive_max_voltage = 12.625;
+  chassis.drive_timeout = 595;
+  chassis.drive_settle_time = 250;
+  chassis.drive_settle_time = 0;
+  chassis.drive_max_voltage = 5000;
+
+  toggleAligner();
+  intakeInterface.highGoalDelay(735, msec);
+  chassis.ml_hold_time_ms = 0;
+  chassis.right_front_sensor_drive_distance(32.0, 18.0, 180);
+  //chassis.drive_distance(-25.05, 178.35); //was -11.65
+  highGoal();
+
+  chassis.DriveR.setVelocity(0, percent);
+  chassis.DriveL.setVelocity(0, percent);
+  chassis.DriveL.stop();
+  chassis.DriveR.stop();
+
+  //chassis.drive_distance(-8.5, 179.65);
+  wait(1.425,seconds);
+
+  stopSecondStage();
+
+
+  intakeIn();
+  intakeInterface.travel_status = OFF_travel;
+
+  chassis.drive_max_voltage = 12;
+  chassis.drive_timeout = 1000;
+  highGoal();
+  intakeInterface.intake_status = OFF_intake;
+  intakeMotor.stop();
+  chassis.drive_distance(8.5);
+  chassis.set_turn_constants(12, 0.57125, 0.005575, 5.6175,4);
+  chassis.set_turn_exit_conditions(1, 68.5, 975);
+  chassis.turn_to_angle(135);
+  chassis.drive_timeout = 1500;
+  middleTravel.stop();
+  intakeInterface.travel_status = OFF_travel;
+  chassis.drive_distance(25.45); //was 26.5
+  
+
+
+  chassis.set_turn_constants(12, 0.57125, 0.005575, 5.6175,4);
+  chassis.set_turn_exit_conditions(1, 68.5, 975);
+  stopSecondStage();
+  chassis.turn_to_angle(115);
+  chassis.drive_max_voltage = 15.5;
+  chassis.drive_settle_time = 0;
+  chassis.drive_timeout = 650;
+  chassis.drive_distance(11.95, 115); //was 14.95
+  toggleMatchLoad();
+  chassis.set_turn_constants(12, 0.57125, 0.005575, 5.6175,4);
+  chassis.set_turn_exit_conditions(1, 65.5, 975);
+  chassis.turn_to_angle(97.5);
+  wait(0.125, seconds);
+  chassis.drive_settle_time=500;
+  chassis.drive_max_voltage = 5000.5;
+  intakeIn();
+  intakeInterface.travel_status = OFF_travel;
+  chassis.drive_timeout = 1200;
+  chassis.drive_distance(39.85, 101.45); //was 37.5 and the angle was 98.75
+  toggleMatchLoad();
+  chassis.drive_distance(-2.05, 90);
+  chassis.DriveL.setStopping(hold);
+  chassis.DriveR.setStopping(hold);
+  chassis.DriveL.stop();
+  chassis.DriveR.stop();
+}
+void lastBit(){
+  default_constants();
+  chassis.swing_settle_time = 50;
+  chassis.swing_timeout = 500;
+  chassis.drive_settle_time = 75;
+  intakeInterface.startIntakeThread();
+  intakeMotor.setVelocity(100, percent);
+  middleTravel.setVelocity(92.5, percent); //was 85
+  scoreMotor.setVelocity(100, percent);
+
+  intakeInterface.setIntakeVelocity(100);
+  intakeInterface.setTravelVelocity(92.5);
+
+  //TEMPORARY:
+  /*
+  toggleAligner();
+  wait(0.5,seconds);
+  chassis.drive_max_voltage = 11.5;
+  chassis.drive_distance(-22.5);
+  wait(1, seconds);
+  */
+  
+  //chassis.set_heading(0);
+
+  chassis.drive_timeout = 1750;
+  chassis.drive_max_voltage = 12.5; //was 10.5
+  chassis.drive_distance(15.05,0);
+
+
+  chassis.set_turn_constants(12, 0.57125, 0.005875, 5.6575,4);
+  chassis.set_turn_exit_conditions(1, 85.5, 975);
+  chassis.turn_to_angle(315-180);
+
+  intakeIn();
+  intakeInterface.travel_status = IN_CHECK;
+
+  chassis.drive_max_voltage = 10.5;
+  chassis.drive_distance(33.885); //was -16.285
+
+  chassis.set_turn_constants(12, 0.57125, 0.005975, 5.6875,4);
+  chassis.set_turn_exit_conditions(1, 65.5, 975);
+  chassis.turn_to_angle(180); //was 0
+
+  chassis.drive_max_voltage = 12; //was 10.5
+
+  chassis.drive_timeout = 2500;
+  chassis.drive_settle_time=750;
+  //chassis.drive_distance(-87.95, 358.05); //was -87.35
+  
+  //movement across the field down to the middle goal again and the 4th matchloader
+  //chassis.drive_distance(-64.65, 0); //was -64.95 and 358.05
+
+  //chassis.drive_distance(-56.65, 0);
+  chassis.drive_distance(36.45, 180); //was -56.65
+
+  chassis.drive_max_voltage = 6.5;
+  //chassis.drive_distance(-9.75, 3.55);
+  chassis.drive_distance(9.75, 180);
+
+  intakeIn();
+  intakeInterface.travel_status = IN_CHECK;
+  //chassis.set_turn_constants(12, 0.57125, 0.005575, 5.6175,4);
+  //chassis.set_turn_exit_conditions(1, 151.5, 975);
+  //chassis.turn_to_angle(45);
+  
+  //chassis.drive_settle_time=250;
+  //chassis.drive_to_point(44.65, 48);
+  //chassis.drive_max_voltage = 6.55;
+  //chassis.drive_distance(19.5, 45);
+  //chassis.drive_distance(5.5, 45);
 
 
   //will make 3rd ball much more consistent
@@ -282,8 +484,8 @@ void risky_progSkills(){
   chassis.drive_distance(10,180);
 
 
-  chassis.set_turn_constants(12, 0.56625, 0.0055625, 5.2325,4);
-  chassis.set_turn_exit_conditions(1, 213.5, 1075);
+  chassis.set_turn_constants(12, 0.56625, 0.0055625, 5.4325,4);
+  chassis.set_turn_exit_conditions(1, 105.5, 1075);
   chassis.turn_to_angle(-308.85);
   chassis.drive_max_voltage = 9.5;
   chassis.drive_distance(17.325,-329.75); //was 15.125
@@ -327,13 +529,13 @@ void risky_progSkills(){
   */
 
   chassis.ml_hold_time_ms = 550;
-  chassis.right_front_sensor_drive_distance(3.125, 18.1, 0); //left matchloader
+  chassis.right_front_sensor_drive_distance(3.125, 17.6, 0); //left matchloader
 
   chassis.drive_max_voltage = 10.65;
   toggleAligner();
 
   chassis.ml_hold_time_ms = 0;
-  chassis.right_front_sensor_drive_distance(32.0, 18.0, 0);
+  chassis.right_front_sensor_drive_distance(32.0, 17.8, 0);
   highGoal();
 
 
@@ -387,7 +589,11 @@ void risky_progSkills(){
   
   //chassis.DriveL.setStopping(hold);
   //chassis.DriveR.setStopping(hold);
-  wait(1.685, seconds); //was 0.985
+  wait(0.75, seconds); //was 0.985
+  scoreMotor.setVelocity(-32.5, percent);
+  wait(0.685, seconds);
+  scoreMotor.setVelocity(-22.5, percent);
+  wait(0.5, seconds);
   //chassis.DriveL.setStopping(coast);
   //chassis.DriveR.setStopping(coast);
 
