@@ -7,6 +7,7 @@
 
 //Hi Gavin!
 //wassup santi
+//wsg
 
 using namespace vex;
 competition Competition;
