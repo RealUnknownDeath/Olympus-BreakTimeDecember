@@ -313,12 +313,12 @@ void autonomous(void) {
   driveToMatchloader();
   //blueRightElims9Ball();
   //redQualsHook();
+  //risky_soloAWP();
   
   //blueQualsHook();
   
   //safe_progSkills();
   //risky_progSkills();
-  //safe_progSkills();
   //lastBit();
 
   //rightRedElims();

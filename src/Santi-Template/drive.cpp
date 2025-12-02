@@ -323,6 +323,53 @@ void Drive::drive_distance(float distance, float heading, float drive_max_voltag
   }
 }
 
+void Drive::drive_distance_sensor(float distance){
+  drive_distance(distance, get_absolute_heading(), drive_max_voltage, heading_max_voltage, drive_settle_error, drive_settle_time, drive_timeout, drive_kp, drive_ki, drive_kd, drive_starti, heading_kp, heading_ki, heading_kd, heading_starti);
+}
+
+void Drive::drive_distance_sensor(float distance, float heading){
+  drive_distance(distance, heading, drive_max_voltage, heading_max_voltage, drive_settle_error, drive_settle_time, drive_timeout, drive_kp, drive_ki, drive_kd, drive_starti, heading_kp, heading_ki, heading_kd, heading_starti);
+}
+
+void Drive::drive_distance_sensor(float distance, float heading, float drive_max_voltage, float heading_max_voltage){
+  drive_distance(distance, heading, drive_max_voltage, heading_max_voltage, drive_settle_error, drive_settle_time, drive_timeout, drive_kp, drive_ki, drive_kd, drive_starti, heading_kp, heading_ki, heading_kd, heading_starti);
+}
+
+void Drive::drive_distance_sensor(float distance, float heading, float drive_max_voltage, float heading_max_voltage, float drive_settle_error, float drive_settle_time, float drive_timeout){
+  drive_distance(distance, heading, drive_max_voltage, heading_max_voltage, drive_settle_error, drive_settle_time, drive_timeout, drive_kp, drive_ki, drive_kd, drive_starti, heading_kp, heading_ki, heading_kd, heading_starti);
+}
+
+void Drive::drive_distance_sensor(float distance, float heading, float drive_max_voltage, float heading_max_voltage, float drive_settle_error, float drive_settle_time, float drive_timeout, float drive_kp, float drive_ki, float drive_kd, float drive_starti, float heading_kp, float heading_ki, float heading_kd, float heading_starti){
+  PID drivePID(distance, drive_kp, drive_ki, drive_kd, drive_starti, drive_settle_error, drive_settle_time, drive_timeout);
+  PID headingPID(reduce_negative_180_to_180(heading - get_absolute_heading()), heading_kp, heading_ki, heading_kd, heading_starti);
+  float start_average_position = 0;
+  if(distance >=0){
+    start_average_position = DistanceFront.objectDistance(inches);
+  }
+  else{
+    start_average_position = DistanceBack.objectDistance(inches);
+  }
+  float average_position = start_average_position;
+  while(drivePID.is_settled() == false){
+    if(distance >=0){
+      average_position = DistanceFront.objectDistance(inches);
+    }
+    else{
+      average_position = DistanceBack.objectDistance(inches);
+    }
+    float drive_error = distance+start_average_position-average_position;
+    float heading_error = reduce_negative_180_to_180(heading - get_absolute_heading());
+    float drive_output = drivePID.compute(drive_error);
+    float heading_output = headingPID.compute(heading_error);
+
+    drive_output = clamp(drive_output, -drive_max_voltage, drive_max_voltage);
+    heading_output = clamp(heading_output, -heading_max_voltage, heading_max_voltage);
+
+    drive_with_voltage(drive_output+heading_output, drive_output-heading_output);
+    task::sleep(10);
+  }
+}
+
 /**
  * Turns to a given angle with only one side of the drivetrain.
  * Like turn_to_angle(), is optimized for turning the shorter
@@ -471,7 +518,6 @@ void Drive::left_front_sensor_drive_distance(double front_target,
                                    ml_hold_time_ms);
 }
 
-
 void Drive::left_front_sensor_drive_distance(double front_target,
                                              double left_target,
                                              double heading_target,
@@ -506,7 +552,6 @@ void Drive::left_front_sensor_drive_distance(double front_target,
   // --- starting front distance (corrected) for progress ---
   double heading_start   = get_absolute_heading();
 
-  // TODO: replace FrontDist/LeftDist with your actual vex::distance objects
   double rawFrontStartIn = DistanceFront.objectDistance(vex::distanceUnits::in);
   double dF_start        = correctedPerpDistance(rawFrontStartIn,
                                                  heading_start,
@@ -514,6 +559,9 @@ void Drive::left_front_sensor_drive_distance(double front_target,
                                                  front_wall_normal);
 
   double totalTravel = dF_start - front_target;
+
+  // +1 = going forward, -1 = going backward
+  double dirSign = (totalTravel >= 0.0) ? 1.0 : -1.0;
 
   // If already basically at front distance, just clean heading and hold.
   if (fabs(totalTravel) < 1.0) {
@@ -579,7 +627,179 @@ void Drive::left_front_sensor_drive_distance(double front_target,
     if (progress < align_phase_end) {
       double phaseFrac = progress / align_phase_end; // 0..1
       double taper     = 1.0 - phaseFrac;            // 1..0
-      biasDeg = -kAlign * eL * taper;
+      // For left wall: forward => -kAlign*eL, backward => flipped by dirSign
+      biasDeg = -kAlign * eL * taper * dirSign;
+      biasDeg = dclamp(biasDeg, -max_lean, max_lean);
+    }
+    // After align_phase_end, biasDeg = 0 → pure heading_target
+
+    double desiredHeading = heading_target + biasDeg;
+
+    // --- Heading PID ---
+    double hErr = angleDiffDeg(desiredHeading, theta);
+    double turn = headingPID.compute(hErr);
+
+    // --- Forward from front error ---
+    double forward = kF * eF;
+    forward = dclamp(forward, -max_forward_voltage, max_forward_voltage);
+
+    if (progress > slow_down_start) {
+      forward *= slow_down_factor;
+    }
+
+    // If close in front but not in heading, favor turning
+    if (fabs(eF) < 0.5 && fabs(hErr) > heading_tolerance) {
+      forward *= 0.4;
+    }
+
+    // --- Tank outputs ---
+    double leftV  = forward + turn;
+    double rightV = forward - turn;
+    leftV  = dclamp(leftV,  -12.0, 12.0);
+    rightV = dclamp(rightV, -12.0, 12.0);
+
+    drive_with_voltage(leftV, rightV);
+    vex::task::sleep(loopDt);
+  }
+}
+
+// ================== RIGHT WALL VERSION ==================
+
+void Drive::right_front_sensor_drive_distance(double front_target,
+                                              double right_target,
+                                              double heading_target) {
+  right_front_sensor_drive_distance(front_target, right_target, heading_target,
+                                    ml_front_sensor_offset,
+                                    ml_right_sensor_offset,
+                                    ml_align_phase_end,
+                                    ml_slow_down_start,
+                                    ml_slow_down_factor,
+                                    ml_kF,
+                                    ml_kAlign,
+                                    ml_max_lean,
+                                    ml_max_forward_voltage,
+                                    ml_heading_kP,
+                                    ml_heading_kI,
+                                    ml_heading_kD,
+                                    ml_front_tolerance,
+                                    ml_right_tolerance,
+                                    ml_heading_tolerance,
+                                    ml_timeout,
+                                    ml_loopDt,
+                                    ml_hold_time_ms);
+}
+
+void Drive::right_front_sensor_drive_distance(double front_target,
+                                              double right_target,
+                                              double heading_target,
+                                              double front_sensor_offset,
+                                              double right_sensor_offset,
+                                              double align_phase_end,
+                                              double slow_down_start,
+                                              double slow_down_factor,
+                                              double kF,
+                                              double kAlign,
+                                              double max_lean,
+                                              double max_forward_voltage,
+                                              double heading_kP,
+                                              double heading_kI,
+                                              double heading_kD,
+                                              double front_tolerance,
+                                              double right_tolerance,
+                                              double heading_tolerance,
+                                              double timeout,
+                                              int    loopDt,
+                                              double hold_time_ms) {
+  // Wall normals: where beams point when squared at target
+  double front_wall_normal = heading_target + front_sensor_offset;
+  double right_wall_normal = heading_target + right_sensor_offset;
+
+  // Helper for consistent finish
+  auto finish_and_hold = [&](void) {
+    drive_stop(vex::brakeType::hold);
+    vex::task::sleep((int)hold_time_ms);
+  };
+
+  // --- starting front distance (corrected) for progress ---
+  double heading_start   = get_absolute_heading();
+
+  double rawFrontStartIn = DistanceFront.objectDistance(vex::distanceUnits::in);
+  double dF_start        = correctedPerpDistance(rawFrontStartIn,
+                                                 heading_start,
+                                                 front_sensor_offset,
+                                                 front_wall_normal);
+
+  double totalTravel = dF_start - front_target;
+
+  // +1 = going forward, -1 = going backward
+  double dirSign = (totalTravel >= 0.0) ? 1.0 : -1.0;
+
+  // If already basically at front distance, just clean heading and hold.
+  if (fabs(totalTravel) < 1.0) {
+    PID headingPID(angleDiffDeg(heading_target, get_absolute_heading()),
+                   heading_kP, heading_kI, heading_kD, heading_starti);
+    while (true) {
+      double theta = get_absolute_heading();
+      double hErr  = angleDiffDeg(heading_target, theta);
+      if (fabs(hErr) < heading_tolerance) {
+        finish_and_hold();
+        break;
+      }
+      double turn = headingPID.compute(hErr);
+      drive_with_voltage(-turn, +turn);
+      vex::task::sleep(loopDt);
+    }
+    return;
+  }
+
+  PID headingPID(0.0, heading_kP, heading_kI, heading_kD, heading_starti);
+
+  double startTimeMs = vex::timer::system();
+
+  while (true) {
+    double nowMs = vex::timer::system();
+    if (nowMs - startTimeMs > timeout) {
+      // Safety timeout
+      finish_and_hold();
+      break;
+    }
+
+    // --- Sensor reads ---
+    double rawFrontIn = DistanceFront.objectDistance(vex::distanceUnits::in);
+    double rawRightIn = DistanceRight.objectDistance(vex::distanceUnits::in);
+    double theta      = get_absolute_heading();
+
+    // --- Correct to perpendicular distances ---
+    double dF = correctedPerpDistance(rawFrontIn, theta,
+                                      front_sensor_offset, front_wall_normal);
+    double dR = correctedPerpDistance(rawRightIn, theta,
+                                      right_sensor_offset, right_wall_normal);
+
+    // --- Errors ---
+    double eF    = dF - front_target;
+    double eR    = dR - right_target;          // distance to RIGHT wall error
+    double hErr0 = angleDiffDeg(heading_target, theta);
+
+    // --- Stop condition: inside tolerance box ---
+    if (fabs(eF) < front_tolerance &&
+        fabs(eR) < right_tolerance &&
+        fabs(hErr0) < heading_tolerance) {
+      finish_and_hold();
+      break;
+    }
+
+    // --- Progress based on front distance (0..1) ---
+    double progress = (dF_start - dF) / totalTravel;
+    if (progress < 0.0) progress = 0.0;
+    if (progress > 1.0) progress = 1.0;
+
+    // --- Heading bias for Phase 1 ---
+    double biasDeg = 0.0;
+    if (progress < align_phase_end) {
+      double phaseFrac = progress / align_phase_end; // 0..1
+      double taper     = 1.0 - phaseFrac;            // 1..0
+      // For right wall: forward => +kAlign*eR, backward => flipped by dirSign
+      biasDeg =  kAlign * eR * taper * dirSign;
       biasDeg = dclamp(biasDeg, -max_lean, max_lean);
     }
     // After align_phase_end, biasDeg = 0 → pure heading_target

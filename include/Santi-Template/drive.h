@@ -91,7 +91,7 @@ public:
 
   double ml_front_sensor_offset = 0.0;
   double ml_left_sensor_offset = -90.0;
-  double ml_rightSensorOffsetDeg = 90.0;
+  double ml_right_sensor_offset = 90.0;
 
   //Phases:
   double ml_align_phase_end = 0.825; ///was 0.7
@@ -100,8 +100,8 @@ public:
   
   //Gains:
   double ml_kF = 0.45; //was 0.35
-  double ml_kAlign = 3.825; //was 2.0
-  double ml_max_lean = 15.25; //was 12.0
+  double ml_kAlign = 4.625; //was 2.0
+  double ml_max_lean = 45.65; //was 22.65
   
   double ml_max_forward_voltage = 10.0;
   
@@ -111,13 +111,14 @@ public:
 
   //Stop Tolerances:
   double ml_front_tolerance = 0.5;
-  double ml_left_tolerance = 0.5;
+  double ml_left_tolerance = 0.25;
+  double ml_right_tolerance = 0.25;
   double ml_heading_tolerance = 1.0;
   
   //Misc:
   double ml_timeout = 1500.0;
   double ml_loopDt = 20.0;
-  double ml_hold_time_ms = 285.0;
+  double ml_hold_time_ms = 118.5;
 
   Drive(enum::drive_setup drive_setup, motor_group DriveL, motor_group DriveR, int gyro_port, float wheel_diameter, float wheel_ratio, float gyro_scale, int DriveLF_port, int DriveRF_port, int DriveLB_port, int DriveRB_port, int ForwardTracker_port, float ForwardTracker_diameter, float ForwardTracker_center_distance, int SidewaysTracker_port, float SidewaysTracker_diameter, float SidewaysTracker_center_distance);
 
@@ -149,6 +150,12 @@ public:
   void drive_distance(float distance, float heading, float drive_max_voltage, float heading_max_voltage, float drive_settle_error, float drive_settle_time, float drive_timeout);
   void drive_distance(float distance, float heading, float drive_max_voltage, float heading_max_voltage, float drive_settle_error, float drive_settle_time, float drive_timeout, float drive_kp, float drive_ki, float drive_kd, float drive_starti, float heading_kp, float heading_ki, float heading_kd, float heading_starti);
 
+  void drive_distance_sensor(float distance);
+  void drive_distance_sensor(float distance, float heading);
+  void drive_distance_sensor(float distance, float heading, float drive_max_voltage, float heading_max_voltage);
+  void drive_distance_sensor(float distance, float heading, float drive_max_voltage, float heading_max_voltage, float drive_settle_error, float drive_settle_time, float drive_timeout);
+  void drive_distance_sensor(float distance, float heading, float drive_max_voltage, float heading_max_voltage, float drive_settle_error, float drive_settle_time, float drive_timeout, float drive_kp, float drive_ki, float drive_kd, float drive_starti, float heading_kp, float heading_ki, float heading_kd, float heading_starti);
+
   void left_swing_to_angle(float angle);
   void left_swing_to_angle(float angle, bool no_lock);
   void left_swing_to_angle(float angle, bool no_lock, float swing_max_voltage, float swing_settle_error, float swing_settle_time, float swing_timeout, float swing_kp, float swing_ki, float swing_kd, float swing_starti);
@@ -171,6 +178,15 @@ public:
                                         double kF, double kAlign, double max_lean, double max_forward_voltage,
                                         double heading_kP, double heading_kI, double heading_kD,
                                         double front_tolerance, double left_tolerance, double heading_tolerance,
+                                        double timeout, int loopDt, double hold_time_ms);
+
+  void right_front_sensor_drive_distance(double front_target, double right_target, double heading_target);
+  void right_front_sensor_drive_distance(double front_target, double right_target, double heading_target,
+                                        double front_sensor_offset, double right_sensor_offset,
+                                        double align_phase_end, double slow_down_start, double slow_down_factor,
+                                        double kF, double kAlign, double max_lean, double max_forward_voltage,
+                                        double heading_kP, double heading_kI, double heading_kD,
+                                        double front_tolerance, double right_tolerance, double heading_tolerance,
                                         double timeout, int loopDt, double hold_time_ms);
 
   Odom odom;
