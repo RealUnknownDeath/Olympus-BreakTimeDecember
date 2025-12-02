@@ -560,10 +560,10 @@ void Drive::left_front_sensor_drive_distance(double front_target,
 
   double totalTravel = dF_start - front_target;
 
-  // +1 = going forward, -1 = going backward
+  //+1 = going forward, -1 = going backward
   double dirSign = (totalTravel >= 0.0) ? 1.0 : -1.0;
 
-  // If already basically at front distance, just clean heading and hold.
+  //If already basically at front distance, just clean heading and hold.
   if (fabs(totalTravel) < 1.0) {
     PID headingPID(angleDiffDeg(heading_target, get_absolute_heading()),
                    heading_kP, heading_kI, heading_kD, heading_starti);

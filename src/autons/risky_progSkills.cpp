@@ -251,11 +251,11 @@ void lastBit(){
   //chassis.drive_distance(-64.65, 0); //was -64.95 and 358.05
 
   //chassis.drive_distance(-56.65, 0);
-  chassis.drive_distance(36.45, 180); //was -56.65
+  chassis.drive_distance(31.45, 180); //was -56.65
 
   chassis.drive_max_voltage = 6.5;
   //chassis.drive_distance(-9.75, 3.55);
-  chassis.drive_distance(9.75, 180);
+  chassis.drive_distance(12.75, 180);
 
   intakeIn();
   intakeInterface.travel_status = IN_CHECK;
@@ -340,7 +340,7 @@ void lastBit(){
   toggleAligner();
   intakeInterface.highGoalDelay(735, msec);
   chassis.ml_hold_time_ms = 0;
-  chassis.right_front_sensor_drive_distance(32.0, 18.0, 180);
+  chassis.right_front_sensor_drive_distance(32.2, 17.6, 180);
   //chassis.drive_distance(-25.05, 178.35); //was -11.65
   highGoal();
 
@@ -458,7 +458,7 @@ void risky_progSkills(){
 
   chassis.ml_max_forward_voltage = 12;
   chassis.ml_hold_time_ms = 0;
-  chassis.left_front_sensor_drive_distance(32.0, 17.6, 180); //right long goal
+  chassis.left_front_sensor_drive_distance(32.0, 16.8, 180); //right long goal
   highGoal();
 
   chassis.DriveL.stop();
@@ -555,7 +555,7 @@ void risky_progSkills(){
   chassis.drive_max_voltage = 9.5; //was 10.5
   chassis.drive_settle_time = 500;
   //chassis.drive_to_point(118.75, (96+10.855+8)); //96 + 10.855 inches back + botlength/2
-  chassis.drive_distance(15.2885,0); //was 15.2855
+  chassis.drive_distance(15.4885,0); //was 15.2855
 
   //chassis.set_turn_constants(12, 0.56625, 0.0055625, 5.1625,4); //old
   //chassis.set_turn_exit_conditions(1, 253.5, 1075); //old
@@ -571,8 +571,9 @@ void risky_progSkills(){
   chassis.drive_max_voltage = 8;
   chassis.drive_distance(18.25, 225);
   chassis.drive_max_voltage = 2.75;
-  scoreMotor.stop();
+
   chassis.drive_distance(18.5, 225);
+  scoreMotor.stop();
 
   chassis.set_turn_constants(12, 0.57125, 0.005575, 5.6875,4);
   chassis.set_turn_exit_conditions(1, 151.5, 975);
@@ -654,10 +655,10 @@ void risky_progSkills(){
   chassis.drive_distance(-8, 359.5);
   */
   chassis.ml_hold_time_ms = 0;
-  chassis.left_front_sensor_drive_distance(33.0, 18.0, 0);
+  chassis.left_front_sensor_drive_distance(32.2, 18.0, 0);
   
   highGoal();
-  wait(1.475,seconds); //was 1.85 seconds
+  wait(1.775,seconds); //was 1.85 seconds
   
   stopSecondStage();
 

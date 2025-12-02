@@ -311,14 +311,15 @@ void autonomous(void) {
   //safe_soloAWP();
   //redQualsHook();
   //driveToMatchloader();
+  //testRamsete();
   //blueRightElims9Ball();
   //redQualsHook();
-  risky_soloAWP();
+  //risky_soloAWP();
   
   //blueQualsHook();
   
   //safe_progSkills();
-  //risky_progSkills();
+  risky_progSkills();
   //lastBit();
 
   //rightRedElims();

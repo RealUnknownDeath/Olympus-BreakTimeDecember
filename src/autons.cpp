@@ -28,26 +28,66 @@ void driveToMatchloader(){
   default_constants();
   intakeInterface.startIntakeThread();
 
-  toggleMatchLoad();
+  //toggleMatchLoad();
 
-  wait(1, seconds);
+  //wait(1, seconds);
 
-  aPressed();
-  chassis.ml_max_forward_voltage = 10;
+  //aPressed();
+  //chassis.ml_max_forward_voltage = 10;
   //chassis.left_front_sensor_drive_distance(3.125, 17.6, 0); //was 6.2 front distance right matchloader
 
-  //toggleAligner();
+  toggleAligner();
 
   //chassis.ml_max_forward_voltage = 12;
-  //chassis.left_front_sensor_drive_distance(32.0, 17.6, 0); //right long goal
-  //highGoal();
+  chassis.left_front_sensor_drive_distance(32.0, 16.6, 0); //right long goal
+  highGoal();
 
 
-  chassis.right_front_sensor_drive_distance(3.125, 18.1, 0); //left matchloader
+  //chassis.right_front_sensor_drive_distance(3.125, 18.1, 0); //left matchloader
 
-  chassis.drive_distance(-12);
+  //chassis.drive_distance(-12);
 
 
+}
+
+void testRamsete() {
+  // --- 1) Basic Ramsete setup (for testing only; you can move this to pre_auton later) ---
+  chassis.set_track_width(12);           // TODO: put your real track width in inches
+  chassis.set_ramsete_constants(2.0, 0.7); // (b, zeta) = (2, 0.7) is a solid starting point
+  chassis.set_wheel_velocity_pid(0.25, 0.0, 1.5); // wheel vel PID (tune later)
+
+  // Start odom pose at (0,0,0°)
+  chassis.set_coordinates(0.0, 0.0, 0.0);
+
+  // --- 2) Build a super simple straight path: 36" forward along +X ---
+  std::vector<TrajState> test;
+
+  const double distance_in = 36.0;  // go 36 inches forward
+  const double speed_ips   = 24.0;  // 24 in/s cruise speed
+  const double totalTime   = distance_in / speed_ips; // seconds
+  const int    N           = 50;    // number of samples
+  const double v           = speed_ips;
+
+  for (int i = 0; i <= N; ++i) {
+    double alpha = static_cast<double>(i) / N;  // 0..1 along path
+
+    TrajState s{};
+    s.t           = alpha * totalTime;  // time [s]
+    s.x           = alpha * distance_in; // x [in]
+    s.y           = 0.0;                // y [in]
+    s.heading_deg = 0.0;                // face +X the whole time
+    s.v           = (i == N) ? 0.0 : v; // linear speed [in/s]
+    s.w       = 0.0;                // angular speed [deg/s] (straight line)
+
+    test.push_back(s);
+  }
+
+  // --- 3) Follow it with Ramsete ---
+  const int    timeout_ms  = 4000; // 4s safety timeout
+  const double pos_tol_in  = 1.0;  // stop when within 1" of final pose
+  const double ang_tol_deg = 3.0;  // and within 3° of final heading
+
+  chassis.follow_trajectory_ramsete(test, timeout_ms, pos_tol_in, ang_tol_deg);
 }
 
 
