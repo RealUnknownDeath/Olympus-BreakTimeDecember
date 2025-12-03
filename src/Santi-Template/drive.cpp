@@ -1,5 +1,33 @@
 #include "vex.h"
 
+static double dclamp(double v, double lo, double hi) {
+  if (v < lo) return lo;
+  if (v > hi) return hi;
+  return v;
+}
+
+
+//Finds the smallest signed angle (target-current) in [-180,180]
+static double angleDiffDeg(double targetDeg, double currectDeg){
+  double diff = std::fmod(targetDeg - currectDeg + 540, 360)-180;
+  return diff;
+}
+
+//Correct skewed distance to perpendicular-to-wall distance
+static double correctedPerpDistance(double measuredIn, double robotHeadingDeg, double sensorOffsetDeg, double wallNormalDeg){
+  double beamHeadingDeg = robotHeadingDeg + sensorOffsetDeg;
+  double delta = angleDiffDeg(beamHeadingDeg, wallNormalDeg);
+
+  double c = std::cos(to_rad(delta));
+
+  if(std::fabs(c) < 0.25){
+    //reading is trash
+    return 1e9;
+  }
+
+  return measuredIn * c;
+}
+
 /**left_front_sensor_drive_distance
  * Drive constructor for the chassis.
  * Even though there's only one constructor, there can be
@@ -465,33 +493,6 @@ void Drive::right_hook(float angle, double ratio, float swing_max_voltage, float
   }
 }
 
-static inline double dclamp(double v, double lo, double hi) {
-  if (v < lo) return lo;
-  if (v > hi) return hi;
-  return v;
-}
-
-// Smallest signed angle difference (target - current) in [-180,180]
-static inline double angleDiffDeg(double targetDeg, double currentDeg) {
-  // You already have reduce_negative_180_to_180, so use that:
-  return reduce_negative_180_to_180(targetDeg - currentDeg);
-}
-
-// Correct skewed distance to perpendicular-to-wall distance
-static inline double correctedPerpDistance(double measuredIn,
-                                           double robotHeadingDeg,
-                                           double sensorOffsetDeg,   // where sensor points relative to robot front
-                                           double wallNormalDeg) {   // wall normal (field-centric)
-  double beamHeading = robotHeadingDeg + sensorOffsetDeg;
-  double delta       = reduce_negative_180_to_180(beamHeading - wallNormalDeg);
-  double c           = cos(to_rad(delta));  // you already have to_rad()
-
-  // If the beam is very oblique, treat it as unreliable
-  if (fabs(c) < 0.25) {
-    return 1e9;  // effectively "very far"
-  }
-  return measuredIn * c;
-}
 
 
 void Drive::left_front_sensor_drive_distance(double front_target,

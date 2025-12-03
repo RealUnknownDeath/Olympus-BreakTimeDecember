@@ -430,7 +430,7 @@ void usercontrol(void) {
 
 
   intakeMotor.setVelocity(100, percent);
-  middleTravel.setVelocity(85, percent);
+  middleTravel.setVelocity(100, percent);
   scoreMotor.setVelocity(100, percent);
 
   intakeInterface.startIntakeThread();

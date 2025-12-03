@@ -6,26 +6,6 @@
 
 //Santi Utils:
 
-//Finds the smallest signed angle (target-current) in [-180,180]
-static inline double angleDiffDeg(double targetDeg, double currectDeg){
-  double diff = std::fmod(targetDeg - currectDeg + 540, 360)-180;
-  return diff;
-}
-
-//Correct skewed distance to perpendicular-to-wall distance
-static inline double correctedPerpDistance(double measuredIn, double robotHeadingDeg, double sensorOffsetDeg, double wallNormalDeg){
-  double beamHeadingDeg = robotHeadingDeg + sensorOffsetDeg;
-  double delta = angleDiffDeg(beamHeadingDeg, wallNormalDeg);
-
-  double c = std::cos(to_rad(delta));
-
-  if(std::fabs(c) < 0.25){
-    //reading is trash
-    return 1e9;
-  }
-
-  return measuredIn * c;
-}
 
 
 //random_float made with help from AI:
