@@ -1,6 +1,6 @@
 #include "vex.h"
 
-/**
+/**left_front_sensor_drive_distance
  * Drive constructor for the chassis.
  * Even though there's only one constructor, there can be
  * huge differences in implementation depending on the drive style

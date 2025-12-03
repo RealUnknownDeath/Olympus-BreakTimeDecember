@@ -2,7 +2,7 @@
 #include "globals.h"
 #include "vex.h"
 
-void redQualsHook(){qualsHookRoute(true);}
+void redQualsHook(){qualsHookRoute(true);}// gavin run da red side
 void blueQualsHook(){qualsHookRoute(false);}
 
 void qualsHookRoute(bool allienceColor){
@@ -16,7 +16,7 @@ void qualsHookRoute(bool allienceColor){
     defaultSortStatus = BLUE;
   }
   
-  default_constants();
+  default_constants();// gavin da default constants for stuff
   chassis.swing_settle_time = 50;
   chassis.swing_timeout = 500;
   chassis.drive_settle_time = 75;
@@ -28,38 +28,38 @@ void qualsHookRoute(bool allienceColor){
   intakeInterface.startIntakeThread();
 
   intakeIn();
-  intakeInterface.travel_status = IN_CHECK;
+  intakeInterface.travel_status = IN_CHECK;//gav only go a certain for intake
 
 
-  chassis.left_swing_to_angle(0-25.5);
-  chassis.swing_timeout = 1000;
+  chassis.left_swing_to_angle(0-25.5);//turn
+  chassis.swing_timeout = 1000;//turn time
 
-  chassis.set_coordinates(60, 22.5, chassis.get_absolute_heading());
+  chassis.set_coordinates(60, 22.5, chassis.get_absolute_heading());//gav what degree ur turned at or smthn
 
   chassis.drive_max_voltage = 12;
-  chassis.drive_distance(17.25,340);
+  chassis.drive_distance(17.25,340);//gav bot go vroom
 
-  chassis.drive_max_voltage = 1.875;
-  chassis.drive_distance(5.325,340);
+  chassis.drive_max_voltage = 1.875;//gav motor go brrrrrrrrrrr
+  chassis.drive_distance(5.325,340);//gav wheels now go brrrrrrrrrr
   //chassis.drive_distance(7.965, 331.5); //old
   chassis.drive_settle_time = 150;
   chassis.drive_distance(7.265, 331.5); //new
-  chassis.drive_max_voltage = 12;
+  chassis.drive_max_voltage = 12;// gav no clue why three moves are back to back when theres no turn
 
 
   //chassis.set_turn_constants(12, 0.57125, 0.005575, 5.6175,4); //old
   //chassis.set_turn_exit_conditions(1, 151.5, 975); //old
-  chassis.set_turn_constants(12, 0.57125, 0.007585, 5.93275,4); //new
+  chassis.set_turn_constants(12, 0.57125, 0.007585, 5.93275,4); //new// gav pid turn and fancy stuff
   chassis.set_turn_exit_conditions(1, 85.5, 975); //new
 
   chassis.turn_to_angle(222.5); //was 225
 
   scoreMotor.setVelocity(42.5, percent);
-  intakeInterface.middleGoalDelay(180.5, msec); //was 158.5
+  intakeInterface.middleGoalDelay(180.5, msec); //was 158.5// gav first long goal score *u check to see if ran 5 sec
 
-  chassis.drive_settle_time = 75;
+  chassis.drive_settle_time = 75;//*throws hands in air bc u ran 5 sec *ricky starts yelling
   chassis.drive_distance(-15.085); //was -15.05
-  chassis.DriveL.setVelocity(0, percent);
+  chassis.DriveL.setVelocity(0, percent);//aaaaand the bot stopped im cackling on the field
   chassis.DriveR.setVelocity(0, percent);
   
   //chassis.DriveL.setStopping(hold);
@@ -68,9 +68,9 @@ void qualsHookRoute(bool allienceColor){
   //chassis.DriveL.setStopping(coast);
   //chassis.DriveR.setStopping(coast);
 
-  chassis.drive_max_voltage = 9.5;
+  chassis.drive_max_voltage = 9.5;//gav I get told to set the field back up "FIELD MONKEY, RESET"
   toggleMatchLoad();
-  stopSecondStage();
+  stopSecondStage();//gav 2nd matchloader scored I think
   scoreMotor.stop();
   wait(0.0945, seconds);
   //scoreMotor.spin(reverse);
@@ -89,7 +89,7 @@ void qualsHookRoute(bool allienceColor){
   chassis.turn_to_angle(180);
 
   intakeIn();
-  intakeInterface.travel_status = IN_CHECK;
+  intakeInterface.travel_status = IN_CHECK;//pickin up the 4 balls
 
   chassis.drive_max_voltage = 6.65; //was 7.5
   chassis.drive_settle_error = 1;
@@ -100,7 +100,7 @@ void qualsHookRoute(bool allienceColor){
   //NEW:
   chassis.drive_distance(8.125);
   chassis.drive_max_voltage = 2.25;
-  chassis.drive_distance(7.25);
+  chassis.drive_distance(7.25);//gav brrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
   //wait(0.3125, seconds);
   int count = 0;
   if(allienceColor){
@@ -112,7 +112,7 @@ void qualsHookRoute(bool allienceColor){
   else{
     while(!(MatchloadSensor.hue() < 11) && count < (296.5/2)){ //was 306.5
       count++;
-      task::sleep(2);
+      task::sleep(2);//gav bunch of fancy stuff about color checking n the like to score on mid goal?
     }
   }
   toggleMatchLoad();
@@ -163,7 +163,7 @@ void qualsHookRoute(bool allienceColor){
   chassis.drive_max_voltage = 12; //was 12.5
   chassis.drive_distance(-26.45, 177.085); //was 178.85
   chassis.drive_settle_time = 150;
-  highGoal();
+  highGoal();//gav lmao what didnt we jus do that?
   chassis.drive_timeout = 250;
   chassis.drive_max_voltage = 10; //was 9.5
   chassis.drive_distance(-8.5, 179.25); //was -5
@@ -190,7 +190,7 @@ void qualsHookRoute(bool allienceColor){
         middleTravel.stop();
         intakeInterface.travel_status = OFF_travel;
         wait(0.075,seconds);
-        break;
+        break;//gav fancy schmancy scoring on the second long goal
       }
     }
   
