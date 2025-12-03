@@ -60,6 +60,8 @@ void qualsHookRoute(bool allienceColor){
   chassis.drive_settle_time = 75;//*throws hands in air bc u ran 5 sec *ricky starts yelling
   chassis.drive_distance(-15.085); //was -15.05
   chassis.DriveL.setVelocity(0, percent);//aaaaand the bot stopped im cackling on the field
+  //gav yes these comments tell me where i am and they helpful
+  //gav that means stop deleting them Santi
   chassis.DriveR.setVelocity(0, percent);
   
   //chassis.DriveL.setStopping(hold);
