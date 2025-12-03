@@ -593,7 +593,7 @@ void risky_progSkills(){
   wait(0.75, seconds); //was 0.985
   scoreMotor.setVelocity(-32.5, percent);
   wait(0.685, seconds);
-  scoreMotor.setVelocity(-22.5, percent);
+  scoreMotor.setVelocity(-25.5, percent);
   wait(0.5, seconds);
   //chassis.DriveL.setStopping(coast);
   //chassis.DriveR.setStopping(coast);
