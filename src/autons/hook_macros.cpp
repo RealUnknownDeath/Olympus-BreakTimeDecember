@@ -5,6 +5,62 @@
 void leftHookPushFromGoal(double force){
 
   default_constants();
+  chassis.swing_settle_time = 0;
+  chassis.swing_timeout = 5000;
+  chassis.drive_settle_time = 75;
+  intakeMotor.setVelocity(100, percent);
+  middleTravel.setVelocity(92.5, percent);
+  scoreMotor.setVelocity(100, percent);
+
+  chassis.set_coordinates(24, (48-8.5), 180);
+  chassis.set_heading(180);
+  stopSecondStage();
+  intakeIn();
+  intakeInterface.travel_status = IN_CHECK;
+
+  toggleDescore();
+  toggleDescore();
+  
+  chassis.drive_distance(1.25, 180);
+
+  chassis.swing_max_voltage = 9.45;
+
+
+  chassis.swing_settle_time = 0;
+  chassis.right_swing_to_angle(27.5, false);
+
+  chassis.swing_settle_time = 125;
+  //chassis.right_swing_to_angle(310, false);
+  chassis.right_swing_to_angle(313.25, false);
+
+
+  
+  chassis.DriveL.stop();
+  chassis.DriveR.stop();
+
+
+
+  chassis.swing_max_voltage = 3.85*force;
+
+  chassis.right_hook(349.5,(0.6235));
+
+  chassis.swing_timeout = 1750;
+
+  chassis.swing_max_voltage = 6.85*force;
+  chassis.right_hook(354.5,(0.4125));
+  chassis.DriveL.stop();
+  chassis.DriveR.stop();
+  //chassis.swing_kd = 5;
+
+  //chassis.left_hook(180,2/3);
+
+
+}
+
+
+void oldHook_leftHookPushFromGoal(double force){
+
+  default_constants();
   chassis.swing_settle_time = 50;
   chassis.swing_timeout = 500;
   chassis.drive_settle_time = 75;

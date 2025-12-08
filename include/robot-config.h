@@ -27,6 +27,7 @@ extern gps GPS7;
 extern digital_out Aligner;
 extern rotation odom;
 extern optical MatchloadSensor;
+extern digital_out descoreLift;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

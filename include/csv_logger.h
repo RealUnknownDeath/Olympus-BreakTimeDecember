@@ -26,21 +26,29 @@ public:
     path_ = path;
     header_ = header;
 
-    // Detect if file exists and non-empty
+    // Check if file exists & is non-empty
     bool need_header = true;
     {
       std::ifstream test(path_, std::ios::in | std::ios::binary);
       need_header = !test.good() || test.peek() == std::ifstream::traits_type::eof();
     }
 
-    out_.open(path_, std::ios::out | std::ios::app);
-    if (!out_.good()) return false;
-
-    if (need_header && !header_.empty()) {
-      write_line_string(join(header_, ","));
+    // If new/empty, explicitly create/truncate once and write header
+    if (need_header) {
+      std::ofstream create_once(path_, std::ios::out | std::ios::trunc);
+      if (!create_once.good()) return false;
+      if (!header_.empty()) {
+        create_once << join(header_, ",") << "\n";
+      }
+      create_once.flush();
+      create_once.close();
     }
-    return true;
+
+    // Now reopen in append mode for normal logging
+    out_.open(path_, std::ios::out | std::ios::app);
+    return out_.good();
   }
+
 
   // Close file explicitly (also called by destructor).
   void close() {

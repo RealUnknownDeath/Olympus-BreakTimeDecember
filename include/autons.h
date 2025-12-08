@@ -10,6 +10,8 @@ class Drive;
 
 extern Drive chassis;
 
+void testHookMove();
+
 void default_constants();
 
 void odom_constants();

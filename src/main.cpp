@@ -1,3 +1,146 @@
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// LeftMotor1           motor         8               
+// LeftMotor2           motor         9               
+// LeftMotor3           motor         10              
+// RightMotor1          motor         1               
+// RightMotor2          motor         2               
+// RightMotor3          motor         3               
+// Controller1          controller                    
+// Inertial             inertial      20              
+// intakeMotor          motor         14              
+// middleTravel         motor         13              
+// scoreMotor           motor         15              
+// outtakeRaise         digital_out   C               
+// Optical21            optical       21              
+// descorePiston        digital_out   E               
+// matchLoadPiston      digital_out   F               
+// DistanceRight        distance      5               
+// DistanceBack         distance      19              
+// DistanceLeft         distance      6               
+// DistanceFront        distance      18              
+// LineTracker          line          B               
+// GPS7                 gps           7               
+// Aligner              digital_out   H               
+// odom                 rotation      4               
+// MatchloadSensor      optical       17              
+// descoreLift          digital_out   D               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// LeftMotor1           motor         8               
+// LeftMotor2           motor         9               
+// LeftMotor3           motor         10              
+// RightMotor1          motor         1               
+// RightMotor2          motor         2               
+// RightMotor3          motor         3               
+// Controller1          controller                    
+// Inertial             inertial      20              
+// intakeMotor          motor         14              
+// middleTravel         motor         13              
+// scoreMotor           motor         15              
+// outtakeRaise         digital_out   C               
+// Optical21            optical       21              
+// descorePiston        digital_out   G               
+// matchLoadPiston      digital_out   F               
+// DistanceRight        distance      5               
+// DistanceBack         distance      19              
+// DistanceLeft         distance      6               
+// DistanceFront        distance      18              
+// LineTracker          line          B               
+// GPS7                 gps           7               
+// Aligner              digital_out   H               
+// odom                 rotation      4               
+// MatchloadSensor      optical       17              
+// descoreLift          digital_out   D               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// LeftMotor1           motor         8               
+// LeftMotor2           motor         9               
+// LeftMotor3           motor         10              
+// RightMotor1          motor         1               
+// RightMotor2          motor         2               
+// RightMotor3          motor         3               
+// Controller1          controller                    
+// Inertial             inertial      20              
+// intakeMotor          motor         14              
+// middleTravel         motor         13              
+// scoreMotor           motor         15              
+// outtakeRaise         digital_out   C               
+// Optical21            optical       21              
+// descorePiston        digital_out   G               
+// matchLoadPiston      digital_out   F               
+// DistanceRight        distance      5               
+// DistanceBack         distance      19              
+// DistanceLeft         distance      6               
+// DistanceFront        distance      18              
+// LineTracker          line          B               
+// GPS7                 gps           7               
+// Aligner              digital_out   H               
+// odom                 rotation      4               
+// MatchloadSensor      optical       17              
+// descoreUp            digital_out   D               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// LeftMotor1           motor         8               
+// LeftMotor2           motor         9               
+// LeftMotor3           motor         10              
+// RightMotor1          motor         1               
+// RightMotor2          motor         2               
+// RightMotor3          motor         3               
+// Controller1          controller                    
+// Inertial             inertial      20              
+// intakeMotor          motor         14              
+// middleTravel         motor         13              
+// scoreMotor           motor         15              
+// outtakeRaise         digital_out   C               
+// Optical21            optical       21              
+// descorePiston        digital_out   G               
+// matchLoadPiston      digital_out   F               
+// DistanceRight        distance      5               
+// DistanceBack         distance      19              
+// DistanceLeft         distance      6               
+// DistanceFront        distance      18              
+// LineTracker          line          B               
+// GPS7                 gps           7               
+// Aligner              digital_out   H               
+// odom                 rotation      4               
+// MatchloadSensor      optical       17              
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// LeftMotor1           motor         8               
+// LeftMotor2           motor         9               
+// LeftMotor3           motor         10              
+// RightMotor1          motor         1               
+// RightMotor2          motor         2               
+// RightMotor3          motor         3               
+// Controller1          controller                    
+// Inertial             inertial      20              
+// intakeMotor          motor         14              
+// middleTravel         motor         13              
+// scoreMotor           motor         15              
+// outtakeRaise         digital_out   C               
+// Optical21            optical       21              
+// descorePiston        digital_out   G               
+// matchLoadPiston      digital_out   A               
+// DistanceRight        distance      5               
+// DistanceBack         distance      19              
+// DistanceLeft         distance      6               
+// DistanceFront        distance      18              
+// LineTracker          line          B               
+// GPS7                 gps           7               
+// Aligner              digital_out   H               
+// odom                 rotation      4               
+// MatchloadSensor      optical       17              
+// ---- END VEXCODE CONFIGURED DEVICES ----
 #include "vex.h"
 #include "globals.h"
 #include "autons.h"
@@ -111,6 +254,88 @@ PORT4,
 1.55
 
 );
+
+CsvLogger telem_logger;
+#include <vector>
+#include <string>
+#include <cstdio>
+#include <vector>
+#include <string>
+#include <cstdio>   // for snprintf
+
+// Append one CSV line to telem_irl_data.csv on the SD card.
+// Creates the file with header if it doesn't exist yet.
+static bool append_telem_csv_line(const std::string& line) {
+  const char* kName = "inertial_chart.csv";
+  if (!Brain.SDcard.isInserted()) return false;
+
+  // If missing, create with header.
+  if (!Brain.SDcard.exists(kName)) {
+    const char header[] =
+      "t_ms,heading,pitch,roll\n";
+    // make a writable buffer (non-const)
+    std::vector<uint8_t> hbuf(header, header + sizeof(header) - 1);
+    if (!Brain.SDcard.savefile(kName, hbuf.data(), (int)hbuf.size())) return false;
+  }
+
+  // Load existing file (may be empty)
+  const int sz = Brain.SDcard.size(kName);
+  std::vector<uint8_t> existing;
+  if (sz > 0) {
+    existing.resize(sz);
+    if (!Brain.SDcard.loadfile(kName, existing.data(), sz)) return false;
+  }
+
+  // Build new content = existing + new line
+  std::vector<uint8_t> out;
+  out.reserve(sz + (int)line.size());
+  if (sz > 0) out.insert(out.end(), existing.begin(), existing.end());
+  out.insert(out.end(), line.begin(), line.end());
+
+  // Overwrite file with appended content
+  return Brain.SDcard.savefile(kName, out.data(), (int)out.size());
+}
+
+void log_snapshot_immediate() {
+  if (!Brain.SDcard.isInserted()) {
+    Controller1.Screen.clearScreen();
+    Controller1.Screen.setCursor(1, 1);
+    Controller1.Screen.print("Insert SD card");
+    
+    return;
+  }
+
+  const uint32_t t = Brain.timer(msec);
+
+  double heading = chassis.get_absolute_heading();
+  if(heading > 180){
+    heading = 0-(360-heading);
+  }
+  double pitch   = Inertial.pitch();
+  if(pitch > 180){
+    pitch = 0-(360-pitch);
+  }
+  double roll   = Inertial.roll();
+  if(roll > 180){
+    roll = 0-(360-roll);
+  }
+
+  // Format CSV line (use ::snprintf, not std::snprintf)
+  char line[160];
+  ::snprintf(line, sizeof(line),
+             "%u,%.3f,%.3f,%.3f\n",
+             (unsigned)t, heading, pitch, roll);
+
+  const bool ok = append_telem_csv_line(std::string(line));
+  if (ok) {
+  } else {
+    Controller1.rumble("-");
+    Controller1.Screen.clearScreen();
+    Controller1.Screen.setCursor(1, 1);
+    Controller1.Screen.print("CSV append failed");
+  }
+}
+
 int current_auton_selection = 0;
 int current_color_selection = 0; //0 = red, 1 = blue, 2 = no color
 bool auton_confirmed = false;
@@ -311,17 +536,31 @@ void autonomous(void) {
   //redLeftDiddler();
   //safe_soloAWP();
   //redQualsHook();
-  //driveToMatchloader();
+  driveToMatchloader();
   //testRamsete();
   //blueRightElims9Ball();
   //redQualsHook();
+  //testHookMove();
+  //leftHookPushFromGoal(1.5);
   //risky_soloAWP();
+  /*
+  chassis.set_heading(90);
+  toggleAligner();
+  chassis.swing_max_voltage = 10;
+  chassis.swing_settle_error = 1;
+  chassis.swing_settle_time = 500;
+
+  chassis.goal_swing_to_angle(180);
   
+  highGoal();
+  */
   //blueQualsHook();
   
   //safe_progSkills();
-  risky_progSkills();
+  //risky_progSkills();
   //lastBit();
+  
+  //redRightElims9Ball();
 
   //rightRedElims();
   //driverProgSkills();
@@ -428,6 +667,7 @@ void usercontrol(void) {
 
   Controller1.ButtonRight.pressed(toggleAligner);
 
+  //Controller1.ButtonUp.pressed(loaderMacro);
 
   intakeMotor.setVelocity(100, percent);
   middleTravel.setVelocity(100, percent);
@@ -452,6 +692,27 @@ void usercontrol(void) {
 
   odom_constants();
   chassis.set_coordinates(72, 25, 0);
+
+
+  if (!Brain.SDcard.isInserted()) {
+    Controller1.Screen.clearScreen();
+    Controller1.Screen.setCursor(1, 1);
+    Controller1.Screen.print("Insert SD card");
+  } else {
+    telem_logger.set_precision(3);
+    telem_logger.set_buffered_flush_ms(0);
+    const bool csv_ok = telem_logger.open(
+        "telem_irl_data.csv",
+        {"t_ms","d_front_in","d_left_in","d_back_in","d_right_in","heading_deg","odom_x_in","odom_y_in"}
+    );
+
+    if (!csv_ok) {
+      Controller1.Screen.clearScreen();
+      Controller1.Screen.setCursor(1, 1);
+      Controller1.Screen.print("CSV open failed");
+    }
+  }
+
   while (1) {
 
     telem_predict_xy(x_pred, y_pred);  // fills x_pred, y_pred
@@ -476,8 +737,14 @@ void usercontrol(void) {
 
     //chassis.control_arcade_left();
     
+    log_snapshot_immediate();
 
     chassis.control_tank_ricky();
+
+    if(Controller1.ButtonUp.pressing()){
+      loaderMacro();
+    }
+
     //chassis.control_arcade();
 
     /*

@@ -23,7 +23,6 @@ void Odom::update_position(float ForwardTracker_position, float SidewaysTracker_
   float prev_orientation_rad = to_rad(this->orientation_deg);
   float orientation_delta_rad = orientation_rad-prev_orientation_rad;
   this->orientation_deg=orientation_deg;
-
   float local_X_position;
   float local_Y_position;
 

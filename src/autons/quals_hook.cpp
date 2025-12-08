@@ -100,6 +100,7 @@ void qualsHookRoute(bool allienceColor){
   chassis.drive_stop(hold);
 
   //NEW:
+  /*
   chassis.drive_distance(8.125);
   chassis.drive_max_voltage = 2.25;
   chassis.drive_distance(7.25);//gav brrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
@@ -117,6 +118,10 @@ void qualsHookRoute(bool allienceColor){
       task::sleep(2);//gav bunch of fancy stuff about color checking n the like to score on mid goal?
     }
   }
+  */
+  //NEWER:
+  chassis.ml_hold_time_ms = 55;
+  chassis.right_front_sensor_drive_distance(3.125, 18.1, 180);
   toggleMatchLoad();
   toggleAligner();
   //OLD:
@@ -163,13 +168,10 @@ void qualsHookRoute(bool allienceColor){
   chassis.drive_timeout = 1750;
   chassis.drive_settle_time = 0; //was 350
   chassis.drive_max_voltage = 12; //was 12.5
-  chassis.drive_distance(-26.45, 177.085); //was 178.85
-  chassis.drive_settle_time = 150;
-  highGoal();//gav lmao what didnt we jus do that?
-  chassis.drive_timeout = 250;
-  chassis.drive_max_voltage = 10; //was 9.5
-  chassis.drive_distance(-8.5, 179.25); //was -5
-  count = 0;
+  chassis.ml_hold_time_ms = 0;
+  chassis.right_front_sensor_drive_distance(32.0, 18.1, 180);
+  highGoal();
+  int count = 0;
   if(allienceColor){ //red
     while(count < 1914/2){
       count++;

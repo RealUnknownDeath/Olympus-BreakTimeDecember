@@ -7,6 +7,7 @@ extern AutonUI::Selection g_autonSel;  // NEW: global selection
 
 // Booleans
 extern bool descoreStatus;
+extern bool descoreLiftStatus;
 extern bool matchLoadStatus;
 extern bool scoreOverride;
 extern bool alignerStatus;

@@ -419,7 +419,7 @@ void Drive::left_swing_to_angle(float angle, bool no_lock, float swing_max_volta
   while(swingPID.is_settled() == false){
     float error = reduce_negative_180_to_180(angle - get_absolute_heading());
     float output = swingPID.compute(error);
-    output = clamp(output, -turn_max_voltage, turn_max_voltage);
+    output = clamp(output, -swing_max_voltage, swing_max_voltage);
     DriveL.spin(fwd, output, volt);
     if(no_lock){
       DriveR.setVelocity(0, percent);
@@ -431,6 +431,70 @@ void Drive::left_swing_to_angle(float angle, bool no_lock, float swing_max_volta
 
     task::sleep(10);
   }
+}
+
+void Drive::goal_swing_to_angle(float angle){
+  float currentAngle = chassis.get_absolute_heading();
+  float error = angle-currentAngle;
+
+  if(error < 0){
+    //spin left reverse fully with just the slighest bit of right going forward
+
+    //after we pass i-gate we can use the right side to go a little backwards to finish the alignement
+    bool finalize = false;
+
+    PID swingPID(reduce_negative_180_to_180(angle - get_absolute_heading()), swing_kp, swing_ki, swing_kd, swing_starti, swing_settle_error, swing_settle_time, swing_timeout);
+    while(swingPID.is_settled() == false){
+      float error = reduce_negative_180_to_180(angle - get_absolute_heading());
+      float output = swingPID.compute(error);
+      output = clamp(output, -swing_max_voltage, swing_max_voltage);
+      DriveL.spin(fwd, output, volt);
+
+      if(error <= swingPID.starti){
+        finalize = true;
+      }
+      if(!finalize){
+        DriveR.spin(reverse, output * 0.1, volt);
+      }
+      else{
+        DriveR.spin(fwd, output * 0.1, volt);
+      }
+      
+
+      task::sleep(10);
+    }
+    
+  }
+
+  else if(error > 0){
+    //spin right reverse fully with just the slighest bit of left going forward
+
+    //after we pass i-gate we can use the right side to go a right backwards to finish the alignement
+
+    bool finalize = false;
+
+    PID swingPID(reduce_negative_180_to_180(angle - get_absolute_heading()), swing_kp, swing_ki, swing_kd, swing_starti, swing_settle_error, swing_settle_time, swing_timeout);
+    while(swingPID.is_settled() == false){
+      float error = reduce_negative_180_to_180(angle - get_absolute_heading());
+      float output = swingPID.compute(error);
+      output = clamp(output, -swing_max_voltage, swing_max_voltage);
+      DriveR.spin(reverse, output, volt);
+
+      if(error <= swingPID.starti){
+        finalize = true;
+      }
+      if(!finalize){
+        DriveL.spin(fwd, output * 0.1, volt);
+      }
+      else{
+        DriveL.spin(reverse, output * 0.1, volt);
+      }
+      
+
+      task::sleep(10);
+    }
+  }
+
 }
 
 void Drive::right_swing_to_angle(float angle){
@@ -446,7 +510,7 @@ void Drive::right_swing_to_angle(float angle, bool no_lock, float swing_max_volt
   while(swingPID.is_settled() == false){
     float error = reduce_negative_180_to_180(angle - get_absolute_heading());
     float output = swingPID.compute(error);
-    output = clamp(output, -turn_max_voltage, turn_max_voltage);
+    output = clamp(output, -swing_max_voltage, swing_max_voltage);
     DriveR.spin(reverse, output, volt);
     if(no_lock){
       DriveL.setVelocity(0, percent);
@@ -466,11 +530,12 @@ void Drive::left_hook(float angle, double ratio){
 void Drive::left_hook(float angle, double ratio, float swing_max_voltage, float swing_settle_error, float swing_settle_time, float swing_timeout, float swing_kp, float swing_ki, float swing_kd, float swing_starti){
   PID swingPID(reduce_negative_180_to_180(angle - get_absolute_heading()), swing_kp, swing_ki, swing_kd, swing_starti, swing_settle_error, swing_settle_time, swing_timeout);
   while(swingPID.is_settled() == false){
-    float error = reduce_negative_180_to_180(angle - get_absolute_heading());
+    //float error = reduce_negative_180_to_180((angle - get_absolute_heading())*(2/(1-ratio)));
+    float error = reduce_negative_180_to_180((angle - get_absolute_heading()));
     float output = swingPID.compute(error);
-    output = clamp(output, -turn_max_voltage, turn_max_voltage);
-    DriveR.spin(fwd, output, volt);
-    DriveL.spin(fwd, (output)*ratio, volt);
+    output = clamp(output, -swing_max_voltage, swing_max_voltage);
+    DriveR.spin(reverse, output, volt);
+    DriveL.spin(reverse, (output)*ratio, volt);
 
     task::sleep(10);
   }
@@ -483,9 +548,10 @@ void Drive::right_hook(float angle, double ratio){
 void Drive::right_hook(float angle, double ratio, float swing_max_voltage, float swing_settle_error, float swing_settle_time, float swing_timeout, float swing_kp, float swing_ki, float swing_kd, float swing_starti){
   PID swingPID(reduce_negative_180_to_180(angle - get_absolute_heading()), swing_kp, swing_ki, swing_kd, swing_starti, swing_settle_error, swing_settle_time, swing_timeout);
   while(swingPID.is_settled() == false){
-    float error = reduce_negative_180_to_180(angle - get_absolute_heading());
+    //float error = reduce_negative_180_to_180((angle - get_absolute_heading())*(2/(1-ratio)));
+    float error = reduce_negative_180_to_180((angle - get_absolute_heading()));
     float output = swingPID.compute(error);
-    output = clamp(output, -turn_max_voltage, turn_max_voltage);
+    output = clamp(output, -swing_max_voltage, swing_max_voltage);
     DriveL.spin(fwd, output, volt);
     DriveR.spin(fwd, (output)*ratio, volt);
 
@@ -593,6 +659,12 @@ void Drive::left_front_sensor_drive_distance(double front_target,
       finish_and_hold();
       break;
     }
+
+    if(!(within_range(Controller1.Axis2.position(),0,5) || within_range(Controller1.Axis3.position(),0,5))){
+        break;
+    }
+
+    
 
     // --- Sensor reads ---
     double rawFrontIn = DistanceFront.objectDistance(vex::distanceUnits::in);
@@ -1221,6 +1293,12 @@ void Drive::control_tank(){
 void Drive::control_tank_ricky(){
   float leftthrottle = controller(primary).Axis3.value(); //no deadzone
   float rightthrottle = controller(primary).Axis2.value(); 
+  
+  if(within_range(leftthrottle,rightthrottle, 4.05)){ //was 3.65
+    leftthrottle = (leftthrottle + rightthrottle)/2;
+    rightthrottle = leftthrottle;
+  }
+
   DriveL.spin(fwd, to_volt(leftthrottle), volt);
   DriveR.spin(fwd, to_volt(rightthrottle), volt);
 }

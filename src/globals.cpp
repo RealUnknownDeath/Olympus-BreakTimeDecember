@@ -6,7 +6,8 @@ AutonUI::Selection g_autonSel{AutonUI::MATCH, /*index*/0, /*isRed*/true, /*confi
 
 
 // Initialize booleans
-bool descoreStatus   = false;
+bool descoreStatus   = true;
+bool descoreLiftStatus   = false;
 bool matchLoadStatus = false;
 bool alignerStatus = false;
 bool scoreOverride   = false;

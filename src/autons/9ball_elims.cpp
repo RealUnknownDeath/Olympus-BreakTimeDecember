@@ -81,7 +81,9 @@ void rightElims9Ball(bool allienceColor){ //WORKED ON
   chassis.swing_timeout = 1547; //was 1587
   chassis.swing_max_voltage = 15;
 
-  chassis.left_swing_to_angle(162.8685, true); //was 170
+  chassis.goal_swing_to_angle(180);
+  //chassis.left_swing_to_angle(162.8685, true); //was 170
+
   chassis.swing_timeout = 265; //was 425
   chassis.drive_timeout = 25;
   highGoal();

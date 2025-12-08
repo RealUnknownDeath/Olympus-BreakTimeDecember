@@ -1,6 +1,8 @@
 //#pragma once
 #include "vex.h"
 
+void loaderMacro();
+
 void intakeIn();
 void intakeOut();
 

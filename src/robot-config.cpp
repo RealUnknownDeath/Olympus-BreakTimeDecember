@@ -21,7 +21,7 @@ motor middleTravel = motor(PORT13, ratio18_1, false);
 motor scoreMotor = motor(PORT15, ratio18_1, false);
 digital_out outtakeRaise = digital_out(Brain.ThreeWirePort.C);
 optical Optical21 = optical(PORT21);
-digital_out descorePiston = digital_out(Brain.ThreeWirePort.G);
+digital_out descorePiston = digital_out(Brain.ThreeWirePort.E);
 digital_out matchLoadPiston = digital_out(Brain.ThreeWirePort.F);
 distance DistanceRight = distance(PORT5);
 distance DistanceBack = distance(PORT19);
@@ -32,6 +32,7 @@ gps GPS7 = gps(PORT7, 165.10, -25.40, mm, 90);
 digital_out Aligner = digital_out(Brain.ThreeWirePort.H);
 rotation odom = rotation(PORT4, false);
 optical MatchloadSensor = optical(PORT17);
+digital_out descoreLift = digital_out(Brain.ThreeWirePort.D);
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable

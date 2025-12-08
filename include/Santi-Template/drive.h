@@ -170,6 +170,7 @@ public:
   void right_hook(float angle, double ratio);
   void right_hook(float angle, double ratio, float swing_max_voltage, float swing_settle_error, float swing_settle_time, float swing_timeout, float swing_kp, float swing_ki, float swing_kd, float swing_starti);
   
+  void goal_swing_to_angle(float angle);
   
   void left_front_sensor_drive_distance(double front_target, double left_target, double heading_target);
   void left_front_sensor_drive_distance(double front_target, double left_target, double heading_target,

@@ -2,6 +2,39 @@
 #include "globals.h"
 #include "drive_helpers.h"
 
+
+void loaderMacro(){
+  if(DistanceRight.objectDistance(inches) >= DistanceLeft.objectDistance(inches)){
+    //Right matchloader
+    double heading_target = 180;
+    chassis.ml_max_forward_voltage = 12;
+    chassis.ml_slow_down_factor = 0.95;
+
+    if(within_range(chassis.get_absolute_heading(), 180, 90)){
+      heading_target = 180;
+    }
+    else{
+      heading_target = 0;
+    }
+    default_constants();
+
+    chassis.ml_hold_time_ms = 1250;
+    chassis.ml_slow_down_start = 0.95;
+    chassis.ml_kAlign = 3.5;
+    chassis.ml_kF = 0.50;
+    
+    chassis.left_front_sensor_drive_distance(3.05, 17.95, heading_target);
+  }
+
+  
+  else if(DistanceRight.objectDistance(inches) < DistanceLeft.objectDistance(inches)){
+    //Left matchloader
+
+    
+  }
+  
+}
+
 void intakeIn(){
   intakeInterface.intake_status = IN;
   intakeMotor.spin(forward);
@@ -40,16 +73,16 @@ void lower(){
 void lowerTotal(){
   if(matchLoadStatus){toggleMatchLoad();}
   outtakeRaise.set(true);
-  descorePiston.set(true);
-  descoreStatus = true;
-  descorePiston = true;
+  descoreLift.set(false);
+  descoreLiftStatus = false;
+  descorePiston.set(false);
+  descoreStatus = false;
 }
 
 void raiseTotal(){
-  if(descoreStatus){
-    descorePiston.set(false);
-    descoreStatus = false;
-    descorePiston = false;
+  if(!descoreLiftStatus){
+    descoreLift.set(true);
+    descoreLiftStatus = true;
   }
   outtakeRaise.set(false);
 }
@@ -61,6 +94,8 @@ void highGoal(){
   descorePiston = false;
   scoreMotor.setVelocity(100, percent);
   descorePiston.set(false);
+  descoreLift.set(true);
+  descoreLiftStatus = true;
   intakeInterface.intake_status = IN;
   intakeInterface.travel_status = NONE_travel;
   middleTravel.spin(forward);
@@ -72,6 +107,8 @@ void middleGoal(){
   scoreOverride = true;
   sorter.sortStatus = NONE;
   raise();
+  descoreLift.set(true);
+  descoreLiftStatus = true;
   intakeInterface.intake_status = IN;
   intakeInterface.travel_status = IN_BLIND;
   scoreMotor.setVelocity(42.5, percent);
@@ -160,8 +197,11 @@ void aReleased(){
 }
 
 void toggleDescore(){
+  if(!descoreLiftStatus){
+    descoreLift.set(true);
+    descoreLiftStatus = true;
+  }
   if(descoreStatus){
-    if(matchLoadStatus){toggleMatchLoad();}
     descorePiston.set(false);
     descoreStatus = false;
   }
@@ -172,12 +212,14 @@ void toggleDescore(){
 }
 
 void toggleMatchLoad(){
+  //descorePiston.set(true);
+  //descoreStatus = true;
   if(matchLoadStatus){ 
     matchLoadPiston.set(false);
     matchLoadStatus = false;
   }
   else{
-    if(descoreStatus){raiseTotal();}
+    //if(descoreStatus){raiseTotal();}
     if(alignerStatus){toggleAligner();}
     matchLoadPiston.set(true);
     matchLoadStatus = true;
@@ -194,6 +236,8 @@ void toggleColorSort(){
 }
 
 void toggleAligner(){
+  //descorePiston.set(false);
+  //descoreStatus = false;
   alignerStatus = !alignerStatus;
   if(alignerStatus){
     if(matchLoadStatus){toggleMatchLoad();}
