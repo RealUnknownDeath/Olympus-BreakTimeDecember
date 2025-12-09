@@ -119,6 +119,7 @@ public:
   double ml_timeout = 1500.0;
   double ml_loopDt = 20.0;
   double ml_hold_time_ms = 118.5;
+  double ml_hold_pressure = 0.0;
 
   Drive(enum::drive_setup drive_setup, motor_group DriveL, motor_group DriveR, int gyro_port, float wheel_diameter, float wheel_ratio, float gyro_scale, int DriveLF_port, int DriveRF_port, int DriveLB_port, int DriveRB_port, int ForwardTracker_port, float ForwardTracker_diameter, float ForwardTracker_center_distance, int SidewaysTracker_port, float SidewaysTracker_diameter, float SidewaysTracker_center_distance);
 
@@ -237,6 +238,8 @@ public:
   void control_tank();
   void control_tank_ricky();
   void control_holonomic();
+
+  void descore_locked_control(bool left, double target, double kAlign);
 
   void set_track_width(double inches);
   void set_ramsete_constants(double b, double zeta);

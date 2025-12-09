@@ -8,7 +8,7 @@ void loaderMacro(){
     //Right matchloader
     double heading_target = 180;
     chassis.ml_max_forward_voltage = 12;
-    chassis.ml_slow_down_factor = 0.95;
+    chassis.ml_slow_down_factor = 0.325; //was 0.95
 
     if(within_range(chassis.get_absolute_heading(), 180, 90)){
       heading_target = 180;
@@ -19,11 +19,14 @@ void loaderMacro(){
     default_constants();
 
     chassis.ml_hold_time_ms = 1250;
-    chassis.ml_slow_down_start = 0.95;
-    chassis.ml_kAlign = 3.5;
-    chassis.ml_kF = 0.50;
+    chassis.ml_align_phase_end = 0.65;
+    chassis.ml_slow_down_start = 0.785; //was 0.95
+    chassis.ml_kAlign = 3.85;
+    chassis.ml_kF = 0.865; //was 0.50
+    chassis.ml_hold_pressure = 2.05;
     
-    chassis.left_front_sensor_drive_distance(3.05, 17.95, heading_target);
+    
+    chassis.left_front_sensor_drive_distance(3.65, 17.95, heading_target);
   }
 
   

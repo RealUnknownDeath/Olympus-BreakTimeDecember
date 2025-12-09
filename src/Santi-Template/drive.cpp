@@ -612,8 +612,16 @@ void Drive::left_front_sensor_drive_distance(double front_target,
 
   // Helper for consistent finish
   auto finish_and_hold = [&](void) {
-    drive_stop(vex::brakeType::hold);
-    vex::task::sleep((int)hold_time_ms);
+    int time_left = hold_time_ms;
+    while(time_left > 0){
+      if(!(within_range(Controller1.Axis2.position(),0,5) || within_range(Controller1.Axis3.position(),0,5))){
+        break;
+      }
+      drive_with_voltage(ml_hold_pressure, ml_hold_pressure);
+      vex::task::sleep(5);
+      time_left -= 5;
+    }
+    
   };
 
   // --- starting front distance (corrected) for progress ---
@@ -637,6 +645,9 @@ void Drive::left_front_sensor_drive_distance(double front_target,
     while (true) {
       double theta = get_absolute_heading();
       double hErr  = angleDiffDeg(heading_target, theta);
+      if(!(within_range(Controller1.Axis2.position(),0,5) || within_range(Controller1.Axis3.position(),0,5))){
+        break;
+      }
       if (fabs(hErr) < heading_tolerance) {
         finish_and_hold();
         break;
@@ -1234,6 +1245,26 @@ void Drive::holonomic_drive_to_pose(float X_position, float Y_position, float an
     DriveRF.spin(fwd, drive_output*cos(-to_rad(get_absolute_heading()) - heading_error + 3*M_PI/4) - turn_output, volt);
     task::sleep(10);
   }
+}
+
+void Drive::descore_locked_control(bool left, double target, double kAdjust){
+
+  while(!Controller1.ButtonLeft.pressing()){
+    double heading = 0;
+    if(within_range(get_absolute_heading(),180,90)){
+      heading = 180;
+    }
+
+    if(left){heading = heading - kAdjust*(target-correctedPerpDistance(DistanceLeft.objectDistance(inches), chassis.get_absolute_heading(),ml_left_sensor_offset, heading+ml_left_sensor_offset));}
+    if(!left){heading = heading - kAdjust*(target-correctedPerpDistance(DistanceRight.objectDistance(inches), chassis.get_absolute_heading(),ml_right_sensor_offset, heading+ml_right_sensor_offset));}
+
+    PID headingPID(reduce_negative_180_to_180(heading - get_absolute_heading()), heading_kp, heading_ki, heading_kd, heading_starti);
+    float throttle = deadband(controller(primary).Axis3.value(), 1);
+    float turn = headingPID.compute(reduce_negative_180_to_180(heading - get_absolute_heading()));
+    DriveL.spin(fwd, to_volt(throttle+turn), volt);
+    DriveR.spin(fwd, to_volt(throttle-turn), volt);
+  }
+  
 }
 
 /**

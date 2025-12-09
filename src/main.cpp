@@ -737,9 +737,18 @@ void usercontrol(void) {
 
     //chassis.control_arcade_left();
     
-    log_snapshot_immediate();
+    //log_snapshot_immediate();
 
-    chassis.control_tank_ricky();
+    if((within_range(DistanceLeft.objectDistance(inches), 6.3, 1) && descoreStatus)){
+      chassis.descore_locked_control(true, 6.3, 5.05);
+    }
+    else if((within_range(DistanceRight.objectDistance(inches), 6.3, 1) && descoreStatus)){
+      chassis.descore_locked_control(false, 6.3, 5.05);
+    }
+    else{
+      chassis.control_tank_ricky();
+    }
+    
 
     if(Controller1.ButtonUp.pressing()){
       loaderMacro();
